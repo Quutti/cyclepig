@@ -24,6 +24,8 @@ SQL_PASS={SQL_PASSWORD}
 SQL_DB={SQL_DATABASE_NAME}
 ```
 
+Note: Port 8082 is reserved for webpack-dev-server
+
 ## Building
 
 ```
