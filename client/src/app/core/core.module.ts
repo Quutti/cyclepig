@@ -1,17 +1,23 @@
 import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 import { AuthGuard } from "./auth-guard.service";
 import { UserService } from "./user.service";
 
 import { NavigationBarComponent } from "./navigation-bar";
+import { SidemenuComponent } from "./sidemenu";
 
 @NgModule({
-    imports: [],
+    imports: [
+        CommonModule
+    ],
     exports: [
-        NavigationBarComponent
+        NavigationBarComponent,
+        SidemenuComponent
     ],
     declarations: [
-        NavigationBarComponent
+        NavigationBarComponent,
+        SidemenuComponent
     ],
     providers: [
         UserService,

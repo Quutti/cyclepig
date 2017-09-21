@@ -8,8 +8,11 @@ import "../styles/main.scss";
 })
 export class AppComponent {
 
-    public onMenuOpenerClick(evt: MouseEvent) {
+    public menuVisible = false;
 
+
+    public onMenuOpenerClick(evt: MouseEvent) {
+        this.menuVisible = true;
     }
 
 }

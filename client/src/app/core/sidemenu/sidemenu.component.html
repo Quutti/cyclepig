@@ -1,0 +1,15 @@
+<div class="sidemenu-container" [class.visible]="visible || closing">
+    <div 
+        class="sidemenu-shroud"
+        [class.sidemenu-shroud--fade]="visible"
+        (click)="close()"
+        (transitionend)="closingReady()"
+    ></div>
+    <div class="sidemenu-menu" [class.sidemenu-menu--slide]="visible">
+        <div class="sidemenu-menu-header">
+            <span>&nbsp;</span>
+            <button class="fa fa-close sidemenu-menu-header-close button-no-style" (click)="close()"></button>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>

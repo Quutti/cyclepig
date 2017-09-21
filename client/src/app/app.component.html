@@ -1,4 +1,9 @@
 <c-navigation-bar brand="Cyclepig" (menuOpenerClicked)="onMenuOpenerClick($event)"></c-navigation-bar>
+
+<c-sidemenu [(visible)]="menuVisible">
+
+</c-sidemenu>
+
 <div class="content-wrapper">
     <router-outlet></router-outlet>
 </div>
