@@ -5,7 +5,7 @@ import { SharedModule } from "./shared/shared.module";
 import { HomeModule, HomeView } from "./home";
 import { AuthGuard } from "./core";
 import { NotFoundView } from "./404";
-import { LoginView } from "./login";
+import { LoginModule, LoginView } from "./login";
 
 
 const routerConfig: ExtraOptions = {
@@ -32,10 +32,10 @@ const routes: Routes = [{
     imports: [
         RouterModule.forRoot(routes, routerConfig),
         SharedModule,
-        HomeModule
+        HomeModule,
+        LoginModule
     ],
     declarations: [
-        LoginView,
         NotFoundView
     ],
     exports: [RouterModule]
