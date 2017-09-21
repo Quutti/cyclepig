@@ -1,0 +1,22 @@
+@import "../../../styles/_variables.scss";
+
+:host {
+    display: block;
+    height: $navbar-height;
+    line-height: $navbar-height;
+    background-color: $navbar-bg;
+    color: #fff;
+}
+
+.brand {
+    font-size: 1.6em;
+    letter-spacing: 1px;
+    font-weight: 200;
+    margin-left: $margin-lg;
+}
+
+.menu-opener {
+    font-size: 1.5em;
+    color: white;
+    margin-left: $margin-sm;
+}

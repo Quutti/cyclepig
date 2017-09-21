@@ -1,0 +1,42 @@
+
+$color-dark: #3a4651;
+$color-bg: #dddddd;
+$color-primary: #37718E;
+$color-secondary: #f0B67F;
+$color-caution: #c33c54;
+
+
+$body-bg: $color-bg;
+
+$navbar-bg: $color-dark;
+$navbar-height: 56px;
+
+$sidemenu-bg: $color-dark;
+$sidemenu-width: 230px;
+
+$header-border: 1px solid $navbar-bg;
+
+$font-base-size: 14px;
+$font-base-color: #333333; 
+
+$border-base-radius: 4px;
+
+$error-color: $color-caution;
+$error-bg: rgba(255, 77, 77, 0.20);
+
+$disabled-bg: #e8e8e8;
+$disabled-color: #cccccc;
+
+$shadow: 0 3px 6px rgba(0, 0, 0, 0.02), 0 3px 6px rgba(0, 0, 0, 0.14);
+
+$padding: 15px;
+$margin: $padding;
+
+$padding-lg: 20px;
+$margin-lg: $padding-lg;
+
+$padding-sm: 10px;
+$margin-sm: $padding-sm;
+
+$padding-xs: 5px;
+$margin-xs: $padding-xs; 

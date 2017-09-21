@@ -1,0 +1,21 @@
+@import "./_variables.scss";
+
+
+body {
+    font-size: $font-base-size;
+    font-family: "Roboto", sans-serif;
+    background-color: $body-bg;
+}
+
+button {
+    cursor: pointer;
+}
+
+.button-no-style {
+    border: 0;
+    background-color: transparent;
+}
+
+.content-wrapper {
+    margin-top: $margin;
+}

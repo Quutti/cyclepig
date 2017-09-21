@@ -1,0 +1,29 @@
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th *ngFor="let header of headers">{{header}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of activeItems">
+                <td *ngFor="let cell of item">{{cell}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="text-right">
+    <span class="range-text">{{rangeText}}</span>
+    <button 
+        class="btn btn-default"
+        [disabled]="prevBtnDisabled"
+        (click)="onClickPrev($event)">
+        Prev
+    </button>
+    <button
+        class="btn btn-default"
+        [disabled]="nextBtnDisabled"
+        (click)="onClickNext($event)">
+        Next
+    </button>
+</div>

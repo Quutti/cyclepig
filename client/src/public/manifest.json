@@ -1,0 +1,13 @@
+{
+    "name": "Cyclepig",
+    "display": "standalone",
+    "start_url": "..", 
+    "background_color": "#fff",
+    "theme_color": "#81c339",
+    "description": "",
+    "icons": [{
+      "src": "/assets/img/moneypig-webapp-icon_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }]
+  }
