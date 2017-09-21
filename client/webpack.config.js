@@ -29,8 +29,7 @@ module.exports = (function () {
     config.resolve = {
         extensions: ['.ts', '.js'],
         alias: {
-            "@shared": path.resolve(__dirname, "..", "shared"),
-            "@bank": path.resolve(__dirname, "..", "..", "_bank", "angular")
+            "@shared": path.resolve(__dirname, "..", "shared")
         }
     }
 
