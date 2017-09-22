@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 
 import { AuthGuard } from "./auth-guard.service";
 import { UserService } from "./user.service";
+import { ErrorService } from "./error.service";
 
 import { NavigationBarComponent } from "./navigation-bar";
 import { SidemenuComponent } from "./sidemenu";
@@ -21,6 +22,7 @@ import { SidemenuComponent } from "./sidemenu";
     ],
     providers: [
         UserService,
+        ErrorService,
         AuthGuard
     ]
 })

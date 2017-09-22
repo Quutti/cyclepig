@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { UserService } from "../core/user.service";
+import { UserService, ErrorService } from "../core";
 
 @Component({
     templateUrl: "./login.view.html"
@@ -14,6 +14,7 @@ export class LoginView {
 
     constructor(
         private _userService: UserService,
+        private _errorService: ErrorService,
         private _router: Router
     ) { }
 
@@ -28,8 +29,7 @@ export class LoginView {
             })
             .catch((err: Response) => {
                 if (!err || !err.status) {
-                    /** @todo Real error handling here */
-                    console.error(err);
+                    this._errorService.handleError(err);
                 }
 
                 if (err.status === 400) {
