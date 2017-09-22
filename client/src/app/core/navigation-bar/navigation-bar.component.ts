@@ -8,6 +8,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 export class NavigationBarComponent {
 
     @Input() brand: string;
+    @Input() brandOnly: boolean = false;
     @Output() menuOpenerClicked = new EventEmitter<MouseEvent>();
 
     public handleMenuClick(evt: MouseEvent) {
