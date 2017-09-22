@@ -1,7 +1,9 @@
-<c-navigation-bar brand="Cyclepig" (menuOpenerClicked)="onMenuOpenerClick($event)"></c-navigation-bar>
+<c-navigation-bar brand="Cyclepig" [brandOnly]="!isLoggedIn" (menuOpenerClicked)="onMenuOpenerClick($event)"></c-navigation-bar>
 
-<c-sidemenu [(visible)]="menuVisible">
-
+<c-sidemenu *ngIf="isLoggedIn" [(visible)]="menuVisible">
+    <c-sidemenu-item link="/" text="Home" icon="home" exact="true"></c-sidemenu-item>
+    <c-sidemenu-item link="/bikes" text="Bikes" icon="bicycle"></c-sidemenu-item>
+    <c-sidemenu-item text="Logout" icon="sign-out" (click)="handleLogout()"></c-sidemenu-item>
 </c-sidemenu>
 
 <div class="content-wrapper">
