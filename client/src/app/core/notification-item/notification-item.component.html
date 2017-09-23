@@ -1,0 +1,21 @@
+<div
+    class="notification-item"
+    [class.notification-item-sticky]="item.sticky"
+    [class.notification-item__error]="item.level === 'error'" 
+    [class.notification-item__success]="item.level === 'success'"
+    [class.notification-item--slide]="visible"
+    (transitionend)="handleTransitionEnd()">
+    
+    <div *ngIf="item.sticky" class="notification-item-side">
+        <span class="fa fw notification-item-side-icon" [ngClass]="'fa-' + icon"></span>
+    </div>
+
+    <div class="notification-item-body">
+        <div class="notification-item-title">{{notification.title}}</div>
+        <div *ngIf="!!item.message" class="notification-item-message">{{notification.message}}</div>
+
+        <div *ngIf="item.sticky" class="notification-item-button-container">
+            <button class="btn btn-default btn-sm" (click)="handleCloseButtonClick()">Close</button>
+        </div>
+    </div>
+</div>

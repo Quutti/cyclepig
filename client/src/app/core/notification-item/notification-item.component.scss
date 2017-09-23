@@ -1,0 +1,76 @@
+@import "../../../styles/_variables.scss";
+@import "../../../styles/_mixins.scss";
+
+.notification-item {
+    position: fixed;
+    width: 100%;
+    max-width: 300px;
+    left: 50%;
+    transform: translate(-50%, -110%);
+    transition: transform .2s ease;
+    color: #fff;
+
+    @include shadow();
+
+    // Notification to be always be top of everything else
+    z-index: 9999;
+
+    &.notification-item--slide {
+        transform: translate(-50%, 75px);
+    }
+}
+
+.notification-item-sticky {
+
+    .notification-item-body {
+        margin-left: 50px;
+        background-color: #fff;
+        color: $font-base-color;
+        text-align: left;
+    }
+
+    .notification-item-button-container {
+        text-align: right;
+        margin-top: $margin-sm;
+    }
+
+    .notification-item-side {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        display: inline-block;
+        text-align: center;
+
+        .notification-item-side-icon {
+            font-size: 1.8em;
+            top: 10px;
+            position: relative;
+        }
+    }
+
+}
+
+.notification-item-body {
+    padding: $padding;
+    text-align: center;
+}
+
+.notification-item-title {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.notification-item-message {
+    font-size: 0.9em;
+    margin-top: $margin-xs;
+}
+
+.notification-item__error {
+    background-color: $error-bg;
+}
+
+.notification-item__success {
+    background-color: $color-primary;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { UserService } from "./core";
+import { UserService, NotificationsService } from "./core";
 import "../styles/main.scss";
 
 @Component({
@@ -15,7 +15,8 @@ export class AppComponent implements OnInit {
 
     constructor(
         private _router: Router,
-        private _userService: UserService
+        private _userService: UserService,
+        private _notificationsService: NotificationsService
     ) { }
 
     public onMenuOpenerClick(evt: MouseEvent) {
