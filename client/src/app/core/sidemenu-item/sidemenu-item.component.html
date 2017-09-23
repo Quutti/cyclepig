@@ -1,7 +1,7 @@
 <li class="sidemenu-item">
     <a 
         [routerLink]="link"
-        routerLinkActive="active"
+        [routerLinkActive]="link ? 'active' : ''"
         [routerLinkActiveOptions]="routeOptions"
         class="sidemenu-item-anchor"
     >
