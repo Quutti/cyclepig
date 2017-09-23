@@ -4,22 +4,24 @@ import { Observable } from "rxjs";
 
 import 'rxjs/add/operator/map';
 
-export interface Bike {
+export interface Ride {
     id: number;
-    name: string;
+    description: string;
+    distance: number;
+    date: string;
 }
 
 Injectable()
-export class BikesService {
+export class RidesService {
 
     constructor(
         /** @todo Little bit mystery why this use of Inject decorator is needed here... */
         @Inject(Http) private _http: Http
     ) { }
 
-    public getBikes(): Observable<Bike[]> {
-        return this._http.get("/api/v1/bikes")
-            .map(response => response.json().payload as Bike[]);
+    public getRides(): Observable<Ride[]> {
+        return this._http.get("/api/v1/rides")
+            .map(response => response.json().payload as Ride[]);
     }
 
 }

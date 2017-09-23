@@ -7,6 +7,7 @@ import { AuthGuard } from "./core";
 import { NotFoundView } from "./404";
 import { LoginModule, LoginView } from "./login";
 import { BikesModule, BikesResolver } from "./bikes";
+import { RidesModule, RidesResolver } from "./rides";
 
 
 const routerConfig: ExtraOptions = {
@@ -21,7 +22,8 @@ const routes: Routes = [{
     pathMatch: "full",
     component: HomeView,
     resolve: {
-        bikes: BikesResolver
+        bikes: BikesResolver,
+        rides: RidesResolver
     },
     canActivate: [AuthGuard]
 }, {
@@ -35,7 +37,8 @@ const routes: Routes = [{
         SharedModule,
         HomeModule,
         LoginModule,
-        BikesModule
+        BikesModule,
+        RidesModule
     ],
     declarations: [
         NotFoundView
