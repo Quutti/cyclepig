@@ -1,7 +1,9 @@
 <sh-card heading="Add a ride">
         
     <sh-form-field label="Bike">
-        <select shFormControl></select>
+        <select shFormControl>
+            <option *ngFor="let bike of bikes" [value]="bike.id">{{bike.name}}</option> 
+        </select>
     </sh-form-field>
 
     <sh-form-field label="Description">

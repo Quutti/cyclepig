@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
     public ngOnInit() {
         this._userService.loginStatusBroadcast.subscribe((isLoggedIn: boolean) => {
             this.isLoggedIn = isLoggedIn;
-        })
+        });
     }
 
 }
