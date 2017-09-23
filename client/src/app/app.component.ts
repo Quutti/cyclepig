@@ -23,9 +23,14 @@ export class AppComponent implements OnInit {
         this.menuVisible = true;
     }
 
+    public closeSidemenu() {
+        this.menuVisible = false;
+    }
+
     public handleLogout() {
         this._userService.logout()
             .then(() => {
+                this.menuVisible = false;
                 this._router.navigate(["/login"]);
             })
     }
