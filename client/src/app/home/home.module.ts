@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { SharedModule } from "../shared";
 
 import { HomeView } from "./home.view";
-import { AddRideComponent } from "./add-ride";
+import { RidesAddComponent } from "./rides-add";
 
 @NgModule({
     imports: [
@@ -14,7 +14,7 @@ import { AddRideComponent } from "./add-ride";
     exports: [HomeView],
     declarations: [
         HomeView,
-        AddRideComponent
+        RidesAddComponent,
     ]
 })
 export class HomeModule { }

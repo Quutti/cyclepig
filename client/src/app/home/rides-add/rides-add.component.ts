@@ -3,10 +3,10 @@ import { Component, Input } from "@angular/core";
 import { Bike } from "../../bikes";
 
 @Component({
-    selector: "hm-add-ride",
-    templateUrl: "./add-ride.component.html"
+    selector: "hm-rides-add",
+    templateUrl: "./rides-add.component.html"
 })
-export class AddRideComponent {
+export class RidesAddComponent {
 
     @Input() bikes: Bike[] = [];
 
