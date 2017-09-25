@@ -5,6 +5,7 @@ import { SharedModule } from "../shared";
 
 import { HomeView } from "./home.view";
 import { RidesAddComponent } from "./rides-add";
+import { RidesBurnupComponent } from "./rides-burnup";
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { RidesAddComponent } from "./rides-add";
     declarations: [
         HomeView,
         RidesAddComponent,
+        RidesBurnupComponent
     ]
 })
 export class HomeModule { }
