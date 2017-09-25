@@ -1,0 +1,16 @@
+@import "../../../styles/_variables.scss";
+
+.y-group {
+    /deep/ line {
+        stroke-width: 1px;
+        color: #aaa;
+        opacity: 0.1;
+        shape-rendering: crispEdges
+    }
+}
+
+path {
+    stroke-width: 2px;
+    stroke: $color-primary;
+    fill: transparent;
+}

@@ -1,0 +1,11 @@
+<div #container>
+    <svg #svg>
+        <g #mainGroup transform="translate(35, 10)">
+            <g #yGroup class="y-group"></g>
+            <g #xGroup></g>
+            <g #yGridLines></g>
+
+            <path *ngFor="let path of paths"></path>
+        </g>
+    </svg>
+</div>
