@@ -171,8 +171,6 @@ export class LineChartComponent implements OnInit, AfterViewInit {
     }
 
     private _checkInputs() {
-        console.log(this.labels, this.lines);
-
         this.lines.forEach(line => {
             if (line.points.length !== this.labels.length) {
                 throw new Error("Line count should match label count");
