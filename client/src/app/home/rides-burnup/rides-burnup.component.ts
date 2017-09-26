@@ -1,12 +1,7 @@
 import { Component, Input } from "@angular/core";
 
 import { Ride } from "../../rides";
-import { LineChartLine } from "../../shared/line-chart";
-
-interface LabelDistancePair {
-    label: string;
-    distance: number;
-}
+import { LineChartLine, LineChartData } from "../../shared/line-chart";
 
 @Component({
     selector: "hm-rides-burnup",
@@ -14,8 +9,7 @@ interface LabelDistancePair {
 })
 export class RidesBurnupComponent {
 
-    public labels: string[] = [];
-    public lines: LineChartLine[] = [];
+    public chartLines: LineChartLine[];
 
 
     private _rides: Ride[];
@@ -24,12 +18,11 @@ export class RidesBurnupComponent {
     set rides(value: Ride[]) {
         this._rides = value;
 
-        const res = createLabelDistancePairs(this._rides);
+        const chartData = createLabelDistancePairs(this._rides);
 
-        this.labels = res.map(ds => ds.label);
-        this.lines = [{
-            points: res.map(ds => ds.distance)
-        }];
+        this.chartLines = [
+            { data: chartData }
+        ]
     }
     get rides(): Ride[] {
         return this._rides;
@@ -40,7 +33,7 @@ export class RidesBurnupComponent {
 /**
  * @param rides Rides
  */
-const createLabelDistancePairs = (rides: Ride[]): LabelDistancePair[] => {
+const createLabelDistancePairs = (rides: Ride[]): LineChartData[] => {
 
     // Clone array and stay immutable
     let rideArray = [...rides];
@@ -61,7 +54,7 @@ const createLabelDistancePairs = (rides: Ride[]): LabelDistancePair[] => {
     let lastIndex = 0;
     let distance = 0;
     let rideCount = rides.length;
-    let res: LabelDistancePair[] = [];
+    let res: LineChartData[] = [];
 
     while (runningDate <= endDate) {
 
@@ -84,8 +77,8 @@ const createLabelDistancePairs = (rides: Ride[]): LabelDistancePair[] => {
         }
 
         res.push({
-            label: runningDate.toJSON(),
-            distance
+            date: new Date(runningDate.valueOf()),
+            point: distance
         });
 
         runningDate.setDate(runningDate.getDate() + 1);
