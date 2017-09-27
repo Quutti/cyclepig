@@ -99,6 +99,11 @@ export class LineChartComponent implements OnInit, OnChanges {
 
         update.exit().remove();
 
+        this._mainGroup.selectAll(".path")
+            .transition()
+            .duration(750)
+            .attr('d', this._getLine());
+
         update.enter()
             .append("path")
             .attr('class', 'path')
