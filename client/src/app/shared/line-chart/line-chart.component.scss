@@ -1,16 +1,33 @@
 @import "../../../styles/_variables.scss";
 
-.y-group {
-    /deep/ line {
-        stroke-width: 1px;
-        color: #aaa;
-        opacity: 0.1;
-        shape-rendering: crispEdges
+.line-chart-container {
+    opacity: 1;
+    transition: opacity .2s ease;
+
+    &.line-chart-container--fading {
+        opacity: 0;
     }
 }
 
-/deep/ .path {
-    stroke-width: 2px;
-    stroke: $color-primary;
-    fill: transparent;
+/deep/ {
+    .line-chart-y-group {
+        line {
+            stroke-width: 1px;
+            color: #aaa;
+            opacity: 0.1;
+            shape-rendering: crispEdges
+        }
+
+        path.domain {
+            stroke: transparent;
+        }
+
+    }
+
+
+    .line-chart-path {
+        stroke-width: 2px;
+        stroke: $color-primary;
+        fill: transparent;
+    }
 }

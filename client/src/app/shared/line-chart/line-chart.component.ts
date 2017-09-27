@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, OnChanges, ElementRef } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, OnChanges, ElementRef, HostListener } from "@angular/core";
 import * as d3 from "d3";
 
 export interface LineChartLine {
@@ -31,10 +31,45 @@ interface XY<t1, t2> {
 export class LineChartComponent implements OnInit, OnChanges {
 
     @ViewChild("container") private _containerRef: ElementRef;
+
+    @HostListener('window:resize', ['$event'])
+    onResize(event: Event) {
+        // set fading flag to fadeout the container
+        // during the resize
+        if (this._timeoutHandle === null) {
+            this.fading = true;
+        }
+
+        // Be lazy on resize and trigger action only
+        // if user has not triggered two resize events in
+        // 200ms interval
+        clearTimeout(this._timeoutHandle);
+        this._timeoutHandle = setTimeout(() => {
+            this._removeChart();
+            this._createChart();
+
+            if (this.data) {
+                // Update chart but do not animate
+                this._updateChart(false);
+            }
+
+            // Show container after resize is over
+            this.fading = false;
+
+            this._timeoutHandle = null;
+        }, 200);
+    }
+
     @Input() data: LineChartLine[];
     @Input() height: number = 250;
 
-    private _mainGroup: any;
+    public fading: boolean = false;
+
+    private _container: HTMLDivElement;
+    private _svg: d3.Selection<any, any, any, any> = null;
+    private _mainGroup: d3.Selection<any, any, any, any>;
+
+    private _timeoutHandle: any = null;
     private _width: number;
     private _height: number;
     private _scaleX: d3.ScaleTime<number, number>;
@@ -58,59 +93,83 @@ export class LineChartComponent implements OnInit, OnChanges {
     }
 
     private _createChart() {
-        const container = this._containerRef.nativeElement as HTMLDivElement;
+        this._container = this._containerRef.nativeElement as HTMLDivElement;
 
-        this._width = container.offsetWidth - MARGIN * 2;
+        this._width = this._container.offsetWidth - MARGIN * 2;
         this._height = this.height - MARGIN * 2;
 
-        const svg = d3.select(container).append("svg")
-            .attr('width', container.offsetWidth)
+        this._svg = d3.select(this._container).append("svg")
+            .attr('width', this._container.offsetWidth)
             .attr('height', this.height);
 
-        this._mainGroup = svg.append("g").attr('transform', `translate(${MARGIN}, ${MARGIN})`);
+        this._mainGroup = this._svg.append("g")
+            .attr('transform', `translate(${MARGIN}, ${MARGIN})`);
 
-        let domains = this._getDomains();
+        const domains = this._getDomains();
 
         this._scaleX = d3.scaleTime().domain(domains.x).rangeRound([0, this._width]);
         this._scaleY = d3.scaleLinear().domain(domains.y).rangeRound([this._height, 0]);
 
-        this._axisX = svg.append("g")
+        this._axisX = this._svg.append("g")
             .attr("transform", `translate(${MARGIN}, ${MARGIN + this._height})`)
             .call(d3.axisBottom(this._scaleX));
 
-        this._axisY = svg.append("g")
+        this._axisY = this._svg.append("g")
+            .attr("class", "line-chart-y-group")
             .attr("transform", `translate(${MARGIN}, ${MARGIN})`)
-            .call(d3.axisLeft(this._scaleY));
+            .call(this._getAxisLeft());
     }
 
-    private _updateChart() {
-        const domains = this._getDomains();
+    private _removeChart() {
+        this._svg.remove();
+        this._svg = null;
+    }
 
+    private _updateChart(animate: boolean = true) {
+        // Update domains
+        const domains = this._getDomains();
         this._scaleX.domain(domains.x);
         this._scaleY.domain(domains.y);
 
-        this._axisX.transition().call(d3.axisBottom(this._scaleX));
-        this._axisY.transition().call(d3.axisLeft(this._scaleY));
+        // Update axises
+        this._axisX.transition()
+            .call(d3.axisBottom(this._scaleX));
+        this._axisY.transition()
+            .call(this._getAxisLeft());
 
         const data = this.data.map(l => l.data);
         const update = this._mainGroup
-            .selectAll('.path')
+            .selectAll('.line-chart-path')
             .data(data);
 
         update.exit().remove();
 
-        this._mainGroup.selectAll(".path")
-            .transition()
-            .duration(750)
-            .attr('d', this._getLine());
+        // Update existing lines 
+        let selection = this._mainGroup.selectAll(".line-chart-path")
+        if (animate) {
+            selection
+                .transition()
+                .duration(750)
+                .attr('d', this._getLine());
+        } else {
+            selection.attr('d', this._getLine());
+        }
 
-        update.enter()
+        // When new lines are inserted to the data -array,
+        // append new path and draw a line
+        selection = update.enter()
             .append("path")
-            .attr('class', 'path')
-            .attr('d', this._getLine(this._height))
-            .transition()
-            .duration(750)
-            .attr('d', this._getLine())
+            .attr('class', 'line-chart-path');
+
+        if (animate) {
+            selection
+                .attr('d', this._getLine(this._height) as any)
+                .transition()
+                .duration(750)
+                .attr('d', this._getLine());
+        } else {
+            selection.attr('d', this._getLine());
+        }
     }
 
     private _getDomains(): XY<number[], number[]> {
@@ -166,6 +225,10 @@ export class LineChartComponent implements OnInit, OnChanges {
         });
 
         return max;
+    }
+
+    private _getAxisLeft(): d3.Axis<number | { valueOf(): number; }> {
+        return d3.axisLeft(this._scaleY).tickPadding(7).tickSize(-this._container.offsetWidth + 2 * MARGIN)
     }
 
     private _getLine(fixedYPos?: number): d3.Line<[number, number]> {
