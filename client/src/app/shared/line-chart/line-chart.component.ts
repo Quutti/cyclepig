@@ -120,7 +120,7 @@ export class LineChartComponent implements OnInit, OnChanges {
 
         this._axisX = this._svg.append("g")
             .attr("transform", `translate(${MARGIN}, ${MARGIN + this._height})`)
-            .call(d3.axisBottom(this._scaleX));
+            .call(d3.axisBottom(this._scaleX).ticks(4));
 
         this._axisY = this._svg.append("g")
             .attr("class", "line-chart-y-group")
@@ -172,7 +172,7 @@ export class LineChartComponent implements OnInit, OnChanges {
 
         // Update axises
         this._axisX.transition()
-            .call(d3.axisBottom(this._scaleX));
+            .call(d3.axisBottom(this._scaleX).ticks(4));
         this._axisY.transition()
             .call(this._getAxisLeft());
 
