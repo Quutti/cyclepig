@@ -30,4 +30,17 @@
         stroke: $color-primary;
         fill: transparent;
     }
+
+    .line-chart-mouse-indicator-vertical-line {
+        stroke: $color-caution;
+        stroke-width: 1px;
+        opacity: 0;
+    }
+
+    .line-chart-mouse-line-indicator-dot {
+        stroke: $color-primary;
+        fill: none;
+        stroke-width: 1px;
+        opacity: 0;
+    }
 }

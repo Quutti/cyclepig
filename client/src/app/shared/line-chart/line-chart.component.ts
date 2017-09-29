@@ -68,6 +68,7 @@ export class LineChartComponent implements OnInit, OnChanges {
     private _container: HTMLDivElement;
     private _svg: d3.Selection<any, any, any, any> = null;
     private _mainGroup: d3.Selection<any, any, any, any>;
+    private _interactionGroup: d3.Selection<any, any, any, any>;
 
     private _timeoutHandle: any = null;
     private _width: number;
@@ -76,6 +77,8 @@ export class LineChartComponent implements OnInit, OnChanges {
     private _scaleY: d3.ScaleLinear<number, number>;
     private _axisX: any;
     private _axisY: any;
+
+    private _pathElems: HTMLCollectionOf<SVGPathElement>;
 
     constructor() { }
 
@@ -93,6 +96,8 @@ export class LineChartComponent implements OnInit, OnChanges {
     }
 
     private _createChart() {
+        const self = this;
+
         this._container = this._containerRef.nativeElement as HTMLDivElement;
 
         this._width = this._container.offsetWidth - MARGIN * 2;
@@ -104,6 +109,9 @@ export class LineChartComponent implements OnInit, OnChanges {
 
         this._mainGroup = this._svg.append("g")
             .attr('transform', `translate(${MARGIN}, ${MARGIN})`);
+
+        this._mainGroup.append("path")
+            .attr("class", "line-chart-mouse-indicator-vertical-line");
 
         const domains = this._getDomains();
 
@@ -118,6 +126,37 @@ export class LineChartComponent implements OnInit, OnChanges {
             .attr("class", "line-chart-y-group")
             .attr("transform", `translate(${MARGIN}, ${MARGIN})`)
             .call(this._getAxisLeft());
+
+        // Add layer for user interactions with chart, this must be a top
+        // layer of the chart (added last to base svg)
+        this._interactionGroup = this._svg.append("g")
+            .attr("transform", `translate(${MARGIN}, ${MARGIN})`)
+
+        this._interactionGroup.append("rect")
+            .attr('width', this._width)
+            .attr('height', this._height)
+            .attr('fill', 'none')
+            .attr('pointer-events', 'all')
+            .on('mouseout', () => this._changeIndicatorVisibility(false))
+            .on('mouseover', () => this._changeIndicatorVisibility(true))
+            .on('mousemove', function () {
+                const mouse = d3.mouse(this as any);
+
+                // Move vertical indicator line to the mouse x position
+                self._mainGroup.select(".line-chart-mouse-indicator-vertical-line")
+                    .attr("d", () => `M${mouse[0]},${self._height} ${mouse[0]},0`)
+
+                // Move circles targeting lines to the mouse x + line y position
+                self._mainGroup.select(".line-chart-mouse-line-indicator")
+                    .attr("transform", function (d: LineChartData[], index: number) {
+                        const line = self._pathElems[index];
+
+                        // Get line y position from the mouse x position
+                        const y = self._getYPositionInLine(line, mouse[0]);
+
+                        return `translate(${mouse[0]}, ${y})`;
+                    })
+            });
     }
 
     private _removeChart() {
@@ -170,6 +209,21 @@ export class LineChartComponent implements OnInit, OnChanges {
         } else {
             selection.attr('d', this._getLine());
         }
+
+        // Add circle to every new line indicator
+        // (Only newly added lines are in mouseLineIndicators variable)
+        let mouseLineIndicators = this._mainGroup
+            .selectAll(".line-chart-mouse-line-indicator")
+            .data(data)
+            .enter()
+            .append("g")
+            .attr("class", "line-chart-mouse-line-indicator");
+
+        mouseLineIndicators.append("circle")
+            .attr("r", 7)
+            .attr("class", "line-chart-mouse-line-indicator-dot");
+
+        this._pathElems = this._svg.node().getElementsByClassName("line-chart-path") as HTMLCollectionOf<SVGPathElement>;
     }
 
     private _getDomains(): XY<number[], number[]> {
@@ -245,5 +299,45 @@ export class LineChartComponent implements OnInit, OnChanges {
                 const data = d as LineChartData;
                 return this._scaleY(data.point);
             });
+    }
+
+    /**
+     * Hides / shows vertical line indicator and line specific indicators
+     */
+    private _changeIndicatorVisibility(visible: boolean) {
+        let value = (visible) ? "1" : "0";
+
+        this._mainGroup.select(".line-chart-mouse-indicator-vertical-line")
+            .style("opacity", value);
+
+        this._mainGroup.select(".line-chart-mouse-line-indicator-dot")
+            .style("opacity", value);
+    }
+
+    /**
+     * Returns y position of line in a x position
+     */
+    private _getYPositionInLine(line: SVGPathElement, x: number): number {
+        let start = 0;
+        let end = line.getTotalLength();
+        let target: number = null;
+        let pos: SVGPoint = null;
+
+        while (true) {
+            target = Math.floor((start + end) / 2);
+            pos = line.getPointAtLength(target);
+            if ((target === end || target === start) && pos.x !== x) {
+                break;
+            }
+            if (pos.x > x) {
+                end = target;
+            } else if (pos.x < x) {
+                start = target;
+            } else {
+                break;
+            }
+        }
+
+        return pos.y;
     }
 }
