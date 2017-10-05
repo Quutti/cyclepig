@@ -1,11 +1,39 @@
 @import "../../../styles/_variables.scss";
+@import "../../../styles/_mixins.scss";
 
 .line-chart-container {
     opacity: 1;
     transition: opacity .2s ease;
+    position: relative;
 
     &.line-chart-container--fading {
         opacity: 0;
+    }
+}
+
+.line-chart-tooltip-container {
+    position: absolute;
+    min-width: 125px;
+    max-width: 240px;
+    margin-bottom: 20px;
+
+    .line-chart-tooltip {
+        @include shadow();
+        padding: $padding-sm $padding;
+        background-color: #fff;
+
+        .line-chart-tooltip-header {
+            font-size: 1em;
+            font-weight: bold;
+            margin: 0;
+            padding: 0;
+        }
+
+        .line-chart-tooltip-body {
+            margin: 0;
+            padding: 0;
+        }
+
     }
 }
 

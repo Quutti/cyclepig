@@ -1,1 +1,11 @@
-<div #container [style.height]="height" class="line-chart-container" [class.line-chart-container--fading]="fading"></div>
+<div #container [style.height]="height" class="line-chart-container" [class.line-chart-container--fading]="fading">
+    <div #tooltipContainer *ngIf="!!activeItem" class="line-chart-tooltip-container">
+        <div class="line-chart-tooltip">
+            <ng-template *ngIf="!!tooltipTemplate" [ngTemplateOutlet]="tooltipTemplate" [ngOutletContext]="{date: activeItem.date, point: activeItem.point}"></ng-template>
+            <div *ngIf="!tooltipTemplate">
+                <h4 class="line-chart-tooltip-header">{{ formatDate(activeItem.date) }}</h4>
+                <p class="line-chart-tooltip-body">{{ activeItem.point.toFixed(2) }} km</p>
+            </div>
+        </div>
+    </div>
+</div>

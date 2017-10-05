@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, ViewChild, OnChanges, ElementRef, HostListener } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, OnChanges, ElementRef, HostListener, TemplateRef, ContentChild } from "@angular/core";
 import * as d3 from "d3";
+
+import { DateUtilsService } from "../utils";
 
 export interface LineChartLine {
     color?: string;
@@ -31,6 +33,8 @@ interface XY<t1, t2> {
 export class LineChartComponent implements OnInit, OnChanges {
 
     @ViewChild("container") private _containerRef: ElementRef;
+    @ViewChild("tooltipContainer") private _tooltipContainerRef: ElementRef;
+    @ContentChild("tooltip") public tooltipTemplate: TemplateRef<any>;
 
     @HostListener('window:resize', ['$event'])
     onResize(event: Event) {
@@ -65,6 +69,8 @@ export class LineChartComponent implements OnInit, OnChanges {
 
     public fading: boolean = false;
 
+    public activeItem: LineChartData = null;
+
     private _container: HTMLDivElement;
     private _svg: d3.Selection<any, any, any, any> = null;
     private _mainGroup: d3.Selection<any, any, any, any>;
@@ -80,7 +86,9 @@ export class LineChartComponent implements OnInit, OnChanges {
 
     private _pathElems: HTMLCollectionOf<SVGPathElement>;
 
-    constructor() { }
+    constructor(
+        private _dateUtilsService: DateUtilsService
+    ) { }
 
     public ngOnInit() {
         this._createChart();
@@ -93,6 +101,10 @@ export class LineChartComponent implements OnInit, OnChanges {
         if (this._mainGroup) {
             this._updateChart();
         }
+    }
+
+    public formatDate(date: Date): string {
+        return this._dateUtilsService.formatDate(date);
     }
 
     private _createChart() {
@@ -137,25 +149,47 @@ export class LineChartComponent implements OnInit, OnChanges {
             .attr('height', this._height)
             .attr('fill', 'none')
             .attr('pointer-events', 'all')
-            .on('mouseout', () => this._changeIndicatorVisibility(false))
+            .on('mouseout', () => {
+                this._changeIndicatorVisibility(false);
+
+                // Set active item to null to hide tooltip
+                this.activeItem = null;
+            })
             .on('mouseover', () => this._changeIndicatorVisibility(true))
             .on('mousemove', function () {
                 const mouse = d3.mouse(this as any);
+                const mouseX = mouse[0];
 
                 // Move vertical indicator line to the mouse x position
                 self._mainGroup.select(".line-chart-mouse-indicator-vertical-line")
-                    .attr("d", () => `M${mouse[0]},${self._height} ${mouse[0]},0`)
+                    .attr("d", () => `M${mouse[0]},${self._height} ${mouseX},0`)
 
                 // Move circles targeting lines to the mouse x + line y position
                 self._mainGroup.select(".line-chart-mouse-line-indicator")
                     .attr("transform", function (d: LineChartData[], index: number) {
+                        // Get the closest value related to mouse x position from the x scale
+                        const date = self._scaleX.invert(mouseX);
                         const line = self._pathElems[index];
+                        const bisect = d3.bisector((d: LineChartData) => d.date).right;
+                        const itemIdx = bisect(d, date);
 
                         // Get line y position from the mouse x position
-                        const y = self._getYPositionInLine(line, mouse[0]);
+                        const y = self._getYPositionInLine(line, mouseX);
 
-                        return `translate(${mouse[0]}, ${y})`;
-                    })
+                        const item = d[itemIdx];
+                        self.activeItem = (item) ? item : null;
+
+                        return `translate(${mouseX}, ${y})`;
+                    });
+
+                if (self._tooltipContainerRef) {
+                    let tooltipContainerElm = self._tooltipContainerRef.nativeElement as HTMLDivElement;
+                    let container = self._containerRef.nativeElement as HTMLDivElement;
+                    let left = (mouseX + MARGIN) - (tooltipContainerElm.clientWidth / 2);
+
+                    tooltipContainerElm.style.left = `${left}px`;
+                    tooltipContainerElm.style.top = `-${tooltipContainerElm.clientHeight - MARGIN + 5}px`;
+                }
             });
     }
 
@@ -326,9 +360,11 @@ export class LineChartComponent implements OnInit, OnChanges {
         while (true) {
             target = Math.floor((start + end) / 2);
             pos = line.getPointAtLength(target);
+
             if ((target === end || target === start) && pos.x !== x) {
                 break;
             }
+
             if (pos.x > x) {
                 end = target;
             } else if (pos.x < x) {

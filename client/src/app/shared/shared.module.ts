@@ -7,6 +7,8 @@ import { LineChartComponent } from "./line-chart"
 
 import { FormControlDirective } from "./form-control";
 
+import { DateUtilsService } from "./utils";
+
 const components = [
     CardComponent,
     FormFieldComponent,
@@ -20,6 +22,7 @@ const directives = [
 @NgModule({
     imports: [CommonModule],
     exports: [...components, ...directives],
-    declarations: [...components, ...directives]
+    declarations: [...components, ...directives],
+    providers: [DateUtilsService]
 })
 export class SharedModule { }
