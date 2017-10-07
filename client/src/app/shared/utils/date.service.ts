@@ -4,6 +4,8 @@ import { AbstractControl } from "@angular/forms";
 @Injectable()
 export class DateUtilsService {
 
+    public validators = new DateTimeValidators(this);
+
     public formatDate(date: Date): string {
         const prefix = (n: number): string => ((n < 10) ? "0" : "") + n;
         const m = date.getMonth() + 1;
@@ -39,4 +41,42 @@ export class DateUtilsService {
 
         return [31, (this.isLeapYear ? 29 : 28), 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
     }
+
+
+}
+
+class DateTimeValidators {
+
+    private _utils: DateUtilsService;
+
+    constructor(utils: DateUtilsService) {
+        this._utils = utils;
+
+        // Bind validators to this to keep context same 
+        // when validating controls in ng
+        this.dateString = this.dateString.bind(this);
+    }
+
+    public dateString(c: AbstractControl): { [key: string]: boolean } | null {
+
+        const isValidDate = (str: string) => {
+            const parts = str.split('-');
+            if (parts.length !== 3) {
+                return false;
+            }
+            const [yInt, mInt, dInt] = parts.map(s => parseInt(s, 10));
+            return (yInt >= 1500 && yInt <= 2500) &&
+                (mInt >= 1 && mInt <= 12) &&
+                (dInt >= 1 && dInt <= this._utils.getMonthDayCount(yInt, mInt));
+        }
+
+        const { value } = c;
+
+        if (typeof value !== 'undefined' && !isValidDate(value)) {
+            return { dateStr: true }
+        }
+
+        return null;
+    }
+
 }

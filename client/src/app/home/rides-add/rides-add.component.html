@@ -1,21 +1,25 @@
 <sh-card heading="Add a ride">
-        
-    <sh-form-field label="Bike">
-        <select shFormControl>
-            <option *ngFor="let bike of bikes" [value]="bike.id">{{bike.name}}</option> 
-        </select>
-    </sh-form-field>
+    <form (ngSubmit)="handleFormSubmit()" [formGroup]="mainForm">
+        <sh-form-field label="Bike">
+            <select shFormControl formControlName="bikeId">
+                <option *ngFor="let bike of bikes" [value]="bike.id">{{bike.name}}</option> 
+            </select>
+        </sh-form-field>
 
-    <sh-form-field label="Description">
-        <input shFormControl name="description">
-    </sh-form-field>
+        <sh-form-field label="Description">
+            <input shFormControl formControlName="description">
+        </sh-form-field>
 
-    <sh-form-field label="Distance">
-        <input shFormControl name="distance" type="number">
-    </sh-form-field>
+        <sh-form-field label="Distance">
+            <input shFormControl type="number" formControlName="distance">
+        </sh-form-field>
 
-    <sh-form-field label="Date">
-        <input shFormControl name="description">
-    </sh-form-field>
+        <sh-form-field label="Date">
+            <input shFormControl formControlName="date">
+        </sh-form-field>
 
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid">Save</button>
+        </div>
+    </form>
 </sh-card>
