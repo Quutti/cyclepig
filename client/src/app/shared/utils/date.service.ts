@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { AbstractControl } from "@angular/forms";
 
+import * as validators from "@shared/validators";
+import * as dateUtils from "@shared/date-utils";
+
 @Injectable()
 export class DateUtilsService {
 
@@ -13,11 +16,8 @@ export class DateUtilsService {
         return [date.getFullYear(), prefix(m), prefix(d)].join("-");
     }
 
-    /**
-     * @see https://stackoverflow.com/questions/16353211/check-if-year-is-leap-year-in-javascript
-     */
     public isLeapYear(year: number): boolean {
-        return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
+        return dateUtils.isLeapYear(year);
     }
 
     /**
@@ -35,11 +35,7 @@ export class DateUtilsService {
      * @param year
      */
     public getMonthDayCount(year: number, month: number): number {
-        if (month && (month < 1 || month > 12)) {
-            throw new Error("Month must be between 1 and 12");
-        }
-
-        return [31, (this.isLeapYear ? 29 : 28), 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+        return dateUtils.getMonthDayCount(year, month);
     }
 
 
@@ -59,20 +55,9 @@ class DateTimeValidators {
 
     public dateString(c: AbstractControl): { [key: string]: boolean } | null {
 
-        const isValidDate = (str: string) => {
-            const parts = str.split('-');
-            if (parts.length !== 3) {
-                return false;
-            }
-            const [yInt, mInt, dInt] = parts.map(s => parseInt(s, 10));
-            return (yInt >= 1500 && yInt <= 2500) &&
-                (mInt >= 1 && mInt <= 12) &&
-                (dInt >= 1 && dInt <= this._utils.getMonthDayCount(yInt, mInt));
-        }
-
         const { value } = c;
 
-        if (typeof value !== 'undefined' && !isValidDate(value)) {
+        if (typeof value !== 'undefined' && !validators.isValidJsonDate(value)) {
             return { dateStr: true }
         }
 
