@@ -10,6 +10,12 @@ export default (function () {
         method: 'get'
     });
 
+    endpoints.push({
+        path: "",
+        handler: handlers.add,
+        method: "post"
+    })
+
     let ep = new EndpointGroup('rides', 1);
     ep.addEndpoints(endpoints);
 
