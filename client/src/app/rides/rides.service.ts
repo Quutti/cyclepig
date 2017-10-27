@@ -1,6 +1,6 @@
 import { Injectable, Inject, EventEmitter } from "@angular/core";
 import { Http } from "@angular/http";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -8,8 +8,12 @@ import 'rxjs/add/operator/toPromise';
 import { NotificationsService, Notification } from "../core";
 import { Ride } from "@shared/types";
 
+type RideSubscriptionHandler = (rides: Ride[]) => void;
+
 Injectable()
 export class RidesService {
+
+    private _ridesSubject = new Subject<Ride[]>();
 
     constructor(
         /** @todo Little bit mystery why this use of Inject decorator is needed here... */
@@ -17,9 +21,18 @@ export class RidesService {
         @Inject(NotificationsService) private _notificationsService: NotificationsService
     ) { }
 
-    public getRides(): Observable<Ride[]> {
+    public getRides(): Promise<Ride[]> {
         return this._http.get("/api/v1/rides")
-            .map(response => response.json().payload as Ride[]);
+            .map(response => {
+                const rides: Ride[] = response.json().payload;
+                this._ridesSubject.next(rides);
+                return rides;
+            })
+            .toPromise()
+    }
+
+    public subscribeRides(f: RideSubscriptionHandler) {
+        this._ridesSubject.subscribe(f);
     }
 
     public addRide(ride: Ride): Promise<void> {
@@ -30,6 +43,10 @@ export class RidesService {
                     level: "success",
                     title: "New ride saved"
                 });
+
+                // Fetch rides from the backend to refresh local rides cache
+                // and trigger subscription emits
+                this.getRides();
             })
             .catch(err => {
                 let notification: Notification;

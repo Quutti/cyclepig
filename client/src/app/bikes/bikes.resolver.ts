@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Resolve } from "@angular/router";
-import { Observable } from "rxjs";
 
 import { BikesService, Bike } from "./bikes.service";
 
@@ -11,7 +10,7 @@ export class BikesResolver implements Resolve<Bike[]> {
         private _bikesService: BikesService
     ) { }
 
-    resolve(): Observable<Bike[]> {
+    resolve(): Promise<Bike[]> {
         return this._bikesService.getBikes();
     }
 

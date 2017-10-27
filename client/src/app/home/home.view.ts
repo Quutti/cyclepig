@@ -22,12 +22,14 @@ export class HomeView implements OnInit {
 
     public ngOnInit() {
         this.bikes = this._route.snapshot.data["bikes"];
-        this._bikesService.getBikes().subscribe((bikes: Bike[]) => {
+
+        this._bikesService.subscribeBikes((bikes: Bike[]) => {
             this.bikes = bikes;
         });
 
         this.rides = this._route.snapshot.data["rides"];
-        this._ridesService.getRides().subscribe((rides: Ride[]) => {
+
+        this._ridesService.subscribeRides((rides: Ride[]) => {
             this.rides = rides;
         });
     }
