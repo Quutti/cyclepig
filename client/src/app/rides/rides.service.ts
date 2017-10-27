@@ -4,12 +4,7 @@ import { Observable } from "rxjs";
 
 import 'rxjs/add/operator/map';
 
-export interface Ride {
-    id: number;
-    description: string;
-    distance: number;
-    date: string;
-}
+import { Ride } from "@shared/types";
 
 Injectable()
 export class RidesService {

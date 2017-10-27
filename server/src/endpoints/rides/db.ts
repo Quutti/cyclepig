@@ -2,15 +2,8 @@ import * as DB from 'easy-mysql-with-promise';
 import * as Promise from 'bluebird';
 
 import * as validators from "@shared/validators";
+import { Ride } from "@shared/types";
 import * as bikeHelpers from "../bikes/helpers";
-
-export interface Ride {
-    id?: number;
-    bikeId: number;
-    distance: number
-    description: string;
-    date: string;
-}
 
 export interface AddRideResult {
     insertId: number;

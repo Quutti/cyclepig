@@ -2,8 +2,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 
+import { Ride } from "@shared/types";
 import { BikesService, Bike } from "../bikes";
-import { RidesService, Ride } from "../rides";
+import { RidesService } from "../rides";
 
 @Component({
     templateUrl: "./home.view.html"

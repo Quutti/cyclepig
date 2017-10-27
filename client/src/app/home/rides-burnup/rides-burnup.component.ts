@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 
-import { Ride } from "../../rides";
+import { Ride } from "@shared/types";
 import { LineChartLine, LineChartData } from "../../shared/line-chart";
 
 @Component({
@@ -10,7 +10,6 @@ import { LineChartLine, LineChartData } from "../../shared/line-chart";
 export class RidesBurnupComponent {
 
     public chartLines: LineChartLine[];
-
 
     private _rides: Ride[];
 
