@@ -3,6 +3,7 @@ import { EndpointHandler } from '../../common/endpoint-group';
 import { Transaction } from '../../common/transaction';
 import { handleError } from '../../common/misc';
 
+import { Ride } from "@shared/types";
 import * as dbRides from './db';
 
 export const all: EndpointHandler = (transaction: Transaction) => {
@@ -13,7 +14,7 @@ export const all: EndpointHandler = (transaction: Transaction) => {
 
 export const add: EndpointHandler = (transaction: Transaction) => {
     console.log(transaction.getBody());
-    dbRides.addRide(transaction.user.id, transaction.getBody().ride)
+    dbRides.addRide(transaction.user.id, transaction.getBody() as Ride)
         .then(result => {
             return (result.insertId > -1)
                 ? transaction.send.ok({ insertId: result.insertId })

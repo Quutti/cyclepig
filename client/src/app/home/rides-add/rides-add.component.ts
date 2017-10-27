@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { AbstractControl, FormGroup, FormControl, FormBuilder, Validators } from "@angular/forms";
 
+import { RidesService } from "../../rides";
 import { DateUtilsService } from "../../shared";
 import { Bike } from "../../bikes";
 
@@ -16,11 +17,14 @@ export class RidesAddComponent implements OnInit {
 
     constructor(
         private _fb: FormBuilder,
+        private _ridesService: RidesService,
         private _dateUtils: DateUtilsService
     ) { }
 
     public handleFormSubmit(e: Event) {
-        /** @todo Logic to save new ride */
+        if (this.mainForm.valid) {
+            this._ridesService.addRide(this.mainForm.value);
+        }
     }
 
     public ngOnInit() {
