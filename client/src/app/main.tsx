@@ -5,7 +5,9 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import thunkMiddleware from "redux-thunk";
 
-import combinedReducers from "./reducers";
+import combinedReducers from "./store/reducers";
+
+import { Routes } from "./routes/routes";
 
 import "./styles/globals/main.global.css";
 
@@ -14,7 +16,7 @@ const store = redux.createStore(combinedReducers, redux.applyMiddleware(thunkMid
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <h1>Hello Cyclepig</h1>
+            <Routes />
         </BrowserRouter>
     </Provider>
 ), document.getElementById("app"))
