@@ -52,7 +52,7 @@ npm run dev
 
 ## And coding style tests
 
-Typescript formatting should be used. Also following Angular guidelines is recommended practise. [Angular StyleGuide](https://angular.io/guide/styleguide)
+Typescript formatting should be used.
 
 ## Authors
 
