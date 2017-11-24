@@ -7,7 +7,7 @@ import thunkMiddleware from "redux-thunk";
 
 import combinedReducers from "./store/reducers";
 
-import { Routes } from "./routes/routes";
+import { App } from "./app";
 
 import "./styles/globals/main.global.css";
 
@@ -16,7 +16,7 @@ const store = redux.createStore(combinedReducers, redux.applyMiddleware(thunkMid
 ReactDOM.render((
     <Provider store={store}>
         <BrowserRouter>
-            <Routes />
+            <App />
         </BrowserRouter>
     </Provider>
 ), document.getElementById("app"))
