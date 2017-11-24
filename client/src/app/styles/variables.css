@@ -5,4 +5,9 @@
     --font-size-base: 14px;
     --font-color-base: #333333;
 
+    --color-1: #4e7494;
+
+    --navigation-bar-height: 52px;
+    --navigation-bar-bg: var(--color-1);
+
 }
