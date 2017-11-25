@@ -1,0 +1,20 @@
+@import "../../styles/variables.css";
+
+.root {
+    background-color: white;
+    box-shadow: var(--shadow);
+}
+
+.heading {
+    padding: 15px;;
+}
+
+.headingText {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+}
+
+.body {
+    padding: 0 15px 15px;
+}
