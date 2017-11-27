@@ -59,9 +59,8 @@ export class Input extends React.Component<OwnProps, OwnState> {
         const labelClasses = `form-control-label ${styles.label}`;
         const feedbackClasses = `form-control-feedback ${styles.feedback}`;
         const inputClasses = classNames({
-            "form-control": true,
             [styles.input]: true,
-            "is-invalid": hasError
+            [styles.hasError]: hasError
         });
 
         const internalType = (type === "password") ? "password" : "text";
