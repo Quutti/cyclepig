@@ -5,9 +5,12 @@
     --font-size-base: 14px;
     --font-color-base: #333333;
 
-    --shadow: 2px 2px 15px 1px rgba(0, 0, 0, .10)
+    --shadow: 2px 2px 15px 1px rgba(0, 0, 0, .10);
 
     --color-1: #4e7494;
+
+    --success-color: #8de057;
+    --error-color: #e05757;
 
     --navigation-bar-height: 52px;
     --navigation-bar-bg: var(--color-1);

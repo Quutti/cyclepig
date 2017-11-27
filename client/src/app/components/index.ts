@@ -1,5 +1,6 @@
 /* App shell */
 export * from "./navigation-bar";
+export * from "./notifications";
 
 /* Containers */
 export * from "./card";

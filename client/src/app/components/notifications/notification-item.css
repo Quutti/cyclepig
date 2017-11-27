@@ -1,0 +1,55 @@
+@import "../../styles/variables.css";
+
+.root {
+    position: absolute;
+    width: 400px;
+    max-width: 85%;
+    left: 50%;
+    transition: transform .2s ease;
+}
+
+.wrapper {
+    padding: 15px;
+    position: relative;
+    left: -50%;
+}
+
+.success {
+    background-color: var(--success-color);
+}
+
+.error {
+    background-color: var(--error-color);
+}
+
+.title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.titleWithClose {
+    position: relative;
+    margin: 0 20px;
+}
+
+.hasMessage {
+    text-align: left;
+
+    &.titleWithClose {
+        margin-left: 0;
+    }
+}
+
+.close {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: -25px;
+    font-size: 1.5rem;
+    top: -15px;
+}
+
+.message {
+    font-size: 0.9rem;
+}

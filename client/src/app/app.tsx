@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom'
 import { RootState } from './store/types';
 import { Routes } from './routes/routes';
 
-import { NavigationBar } from './components';
+import { NavigationBar, Notifications } from './components';
 
 const styles: any = require("./app.css");
 
@@ -25,6 +25,7 @@ class AppImpl extends React.Component<AppStoreProps, {}> {
         return (
             <div className={styles.root}>
                 <NavigationBar title="Cyclepig" />
+                <Notifications />
                 <div className={styles.content}>
                     <Routes />
                 </div>
