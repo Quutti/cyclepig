@@ -20,7 +20,7 @@ interface StoreProps {
 
 const mapStateToProps = (state: RootState): StoreProps => {
     return {
-        isLoggedIn: false
+        isLoggedIn: !!state.auth.user
     }
 }
 
