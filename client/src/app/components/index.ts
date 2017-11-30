@@ -9,6 +9,7 @@ export * from "./card";
 /* Forms */
 export * from "./input";
 export * from "./button";
+export * from "./select";
 
 /* Misc */
 export * from "./loading";
