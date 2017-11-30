@@ -3,6 +3,7 @@ export * from "./navigation-bar";
 export * from "./notifications";
 
 /* Containers */
+export * from "./grid";
 export * from "./card";
 
 /* Forms */
