@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "module": "commonjs",
         "target": "es5",
         "outDir": "./dist",
-        "jsx": "react"
+        "jsx": "react",
+        "paths": {
+            "@shared/*": ["../shared/*"]
+        }
     }
 }

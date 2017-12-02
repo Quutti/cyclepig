@@ -19,7 +19,10 @@ module.exports = function getWebpackConfigs(env = {}) {
     const config = {};
 
     config.resolve = {
-        extensions: ['.ts', '.tsx', '.js', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        alias: {
+            "@shared": path.resolve(__dirname, "..", "shared")
+        }
     }
 
     config.entry = {
