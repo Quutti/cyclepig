@@ -27,7 +27,6 @@ class AppImpl extends React.Component<AppStoreProps, {}> {
 
     constructor(props) {
         super(props);
-
         this.props.dispatch(authGetUser());
     }
 

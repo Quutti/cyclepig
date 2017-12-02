@@ -31,7 +31,7 @@ export const getRidesSummary = (rides: Ride[], options: RidesSummaryOptions): Ri
     const labelMap: string[] = [];
 
     let currentDate = new Date(options.startDate.valueOf());
-    while (currentDate.valueOf() < options.endDate.valueOf()) {
+    while (currentDate.valueOf() <= options.endDate.valueOf()) {
         const label = labeler(currentDate);
         res.push({
             label,
