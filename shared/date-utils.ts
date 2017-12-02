@@ -11,7 +11,7 @@ export const getMonthDayCount = (year: number, month: number): number => {
         throw new Error("Month must be between 1 and 12");
     }
 
-    return [31, (isLeapYear ? 29 : 28), 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+    return [31, (isLeapYear ? 29 : 28), 31, 30, 31, 31, 30, 31, 30, 31, 30, 31][month - 1];
 }
 
 /**
