@@ -20,6 +20,7 @@ interface OwnProps {
     name: string;
     type?: InputTypes;
     isRequired?: boolean;
+    defaultValue?: string;
     value?: string;
     className?: string;
     customValidator?: InputValidator;
@@ -79,6 +80,12 @@ export class Input extends React.Component<OwnProps, OwnState> {
                 {hasError && <div className={feedbackClasses}>{error}</div>}
             </div>
         )
+    }
+
+    public componentWillMount() {
+        if (this.props.defaultValue) {
+            this.setState({ value: this.props.defaultValue });
+        }
     }
 
     public componentWillReceiveProps(newProps: OwnProps) {
