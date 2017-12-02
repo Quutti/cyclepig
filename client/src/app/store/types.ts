@@ -1,5 +1,7 @@
 export interface RootState {
     auth: AuthState;
+    rides: RidesState;
+    bikes: BikesState;
     notifications: NotificationsState;
 }
 
@@ -41,6 +43,27 @@ export interface Notification {
     message?: string;
     timeout?: number;
     sticky?: boolean;
+}
+
+/* Rides */
+
+export const RIDES_ADD = "RIDES_ADD";
+export const RIDES_FETCHING = "RIDES_FETCHING";
+export const RIDES_RECEIVED = "RIDES_RECEIVED";
+export const RIDES_FAILURE = "RIDES_FAILURE";
+
+export interface RidesState {
+    items: Ride[];
+    isFetching: boolean;
+}
+
+export interface Ride {
+    id?: number;
+    bikeId: number;
+    description: string;
+    distance: number;
+    date?: string;
+}
 
 /* Bikes */
 
