@@ -8,10 +8,9 @@ import {
 
 export const addNotification = (notification: Notification) => {
 
-    // Add unique id for the notification if not set
-    if (!notification.id) {
-        notification.id = _.uniqueId("notification");
-    }
+    // Add default values for notification
+    notification.id = notification.id || _.uniqueId("notification");
+    notification.timeout = notification.timeout || 3000;
 
     return {
         type: NOTIFICATIONS_ADD,

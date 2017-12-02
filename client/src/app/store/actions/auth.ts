@@ -67,8 +67,7 @@ const handleSignInError = (err: AxiosError, dispatch: Redux.Dispatch<RootState>)
         dispatch(addNotification({
             title: "Sign in failed",
             message: "Username or password invalid",
-            type: "error",
-            timeout: 3000
+            type: "error"
         }));
     }
 
