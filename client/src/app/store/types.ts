@@ -41,4 +41,22 @@ export interface Notification {
     message?: string;
     timeout?: number;
     sticky?: boolean;
+
+/* Bikes */
+
+export const BIKES_ADD = "BIKES_ADD";
+export const BIKES_FETCHING = "BIKES_FETCHING";
+export const BIKES_RECEIVED = "BIKES_RECEIVED";
+export const BIKES_FAILURE = "BIKES_FAILURE";
+
+export interface BikesState {
+    items: Bike[];
+    isFetching: boolean;
+}
+
+export interface Bike {
+    id?: number;
+    name: string;
+    color: string;
+    added: string;
 }
