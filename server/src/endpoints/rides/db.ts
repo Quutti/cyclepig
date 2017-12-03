@@ -10,6 +10,20 @@ export interface AddRideResult {
     message?: string;
 }
 
+export const getRide = (userId: number, rideId: number): Promise<Ride> => {
+    const sql = `
+        SELECT r.*
+        FROM rides AS r
+        INNER JOIN bikes AS b
+        ON r.bikeId = b.id
+        WHERE b.userId = ?
+        AND r.id = ?
+    `;
+
+    return DB.query(sql, [userId, rideId])
+        .then(res => res[0] || null);
+}
+
 export const getRides = (userId: number): Promise<Ride[]> => {
     const sql = `
         SELECT r.* 

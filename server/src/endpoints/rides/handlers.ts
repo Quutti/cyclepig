@@ -12,8 +12,14 @@ export const all: EndpointHandler = (transaction: Transaction) => {
         .catch(err => handleError(err, transaction));
 }
 
+export const one: EndpointHandler = (transaction: Transaction) => {
+    const rideId = parseInt(transaction.getParams().rideId, 10);
+    dbRides.getRide(transaction.user.id, rideId)
+        .then(ride => (ride) ? transaction.send.ok(ride) : transaction.send.notFound())
+        .catch(err => handleError(err, transaction));
+}
+
 export const add: EndpointHandler = (transaction: Transaction) => {
-    console.log(transaction.getBody());
     dbRides.addRide(transaction.user.id, transaction.getBody() as Ride)
         .then(result => {
             return (result.insertId > -1)

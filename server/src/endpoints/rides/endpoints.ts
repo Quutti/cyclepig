@@ -11,6 +11,12 @@ export default (function () {
     });
 
     endpoints.push({
+        path: ':rideId',
+        handler: handlers.one,
+        method: "get"
+    })
+
+    endpoints.push({
         path: "",
         handler: handlers.add,
         method: "post"
