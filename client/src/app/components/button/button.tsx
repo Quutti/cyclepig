@@ -61,6 +61,7 @@ export class Button extends React.Component<OwnProps, {}> {
 
 
     private _handleClick(evt: React.MouseEvent<HTMLButtonElement>) {
+        evt.preventDefault();
         if (!this.props.disabled) {
             this.props.onClick();
         }

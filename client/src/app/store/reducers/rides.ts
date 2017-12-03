@@ -6,8 +6,11 @@ import {
     RIDES_ADD,
     RIDES_FETCHING,
     RIDES_RECEIVED,
+    RIDES_RECEIVED_ONE,
     RIDES_FAILURE
 } from '../types';
+
+import * as utils from "../utils";
 
 const initialState: RidesState = {
     isFetching: false,
@@ -24,6 +27,12 @@ const rides: Redux.Reducer<RidesState> = (state = initialState, action): RidesSt
         case RIDES_RECEIVED:
             return objectAssign({}, state, {
                 items: action.items,
+                isFetching: false
+            });
+
+        case RIDES_RECEIVED_ONE:
+            return objectAssign({}, state, {
+                items: utils.swapOrAdd(state.items, action.item),
                 isFetching: false
             });
 

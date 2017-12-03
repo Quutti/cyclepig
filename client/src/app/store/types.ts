@@ -50,6 +50,7 @@ export interface Notification {
 export const RIDES_ADD = "RIDES_ADD";
 export const RIDES_FETCHING = "RIDES_FETCHING";
 export const RIDES_RECEIVED = "RIDES_RECEIVED";
+export const RIDES_RECEIVED_ONE = "RIDES_RECEIVED_ONE";
 export const RIDES_FAILURE = "RIDES_FAILURE";
 
 export interface RidesState {

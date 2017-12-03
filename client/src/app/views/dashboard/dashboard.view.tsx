@@ -3,14 +3,15 @@ import * as Redux from 'redux';
 import { connect } from 'react-redux';
 
 import { RootState, Ride, Bike } from '../../store/types';
-import { bikesFetch } from "../../store/actions/bikes";
-import { ridesFetch } from "../../store/actions/rides";
+import { fetchBikes } from "../../store/actions/bikes";
+import { fetchRides } from "../../store/actions/rides";
 import { authSignOut } from "../../store/actions/auth";
 
 import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
 import { Container, Col, Row, Card, Summary, LoadingContent } from "../../components";
+import { AddRideForm } from "./components";
 
 interface DashboardStoreProps {
     rides: Ride[];
@@ -33,8 +34,8 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
     constructor(props) {
         super(props);
 
-        this.props.dispatch(ridesFetch());
-        this.props.dispatch(bikesFetch());
+        this.props.dispatch(fetchRides());
+        this.props.dispatch(fetchBikes());
     }
 
     public render(): JSX.Element {
@@ -62,10 +63,16 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
                             <Col xl={8} lg={8} md={8}>
                             </Col>
                             <Col xl={4} lg={4} md={4}>
-                                <Card heading="Summary" className="mb-3">
+
+                                <Card heading="Summary (all time)" className="mb-3">
                                     <Summary label={"Total rides"} value={`${allRidesSummary.rides}`} />
                                     <Summary label={"Total kms"} value={allRidesSummary.distance.toFixed(2)} />
                                 </Card>
+
+                                <Card heading="Add ride">
+                                    <AddRideForm dispatch={this.props.dispatch} bikes={this.props.bikes} />
+                                </Card>
+
                             </Col>
                         </Row>
                     </Container>

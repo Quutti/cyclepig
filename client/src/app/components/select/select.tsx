@@ -17,7 +17,11 @@ interface OwnProps {
     onChange: (value: string, name: string) => void;
 }
 
-export class Select extends React.Component<OwnProps, {}> {
+interface OwnState {
+    value: string;
+}
+
+export class Select extends React.Component<OwnProps, OwnState> {
 
     private _id: string = _.uniqueId("select");
 
@@ -25,6 +29,10 @@ export class Select extends React.Component<OwnProps, {}> {
         super(props);
 
         this._handleOnChange = this._handleOnChange.bind(this);
+
+        this.state = {
+            value: ""
+        }
     }
 
     public render(): JSX.Element {
@@ -43,6 +51,10 @@ export class Select extends React.Component<OwnProps, {}> {
             );
         });
 
+        if (!this.state.value) {
+            options.unshift(<option key={"empty"} value="0" />);
+        }
+
         return (
             <div className={rootClasses}>
                 <label htmlFor={this._id}>{label}</label>
@@ -58,7 +70,9 @@ export class Select extends React.Component<OwnProps, {}> {
     }
 
     private _handleOnChange(evt) {
-        this.props.onChange(evt.target.value, this.props.name);
+        const { value } = evt.target;
+        this.setState({ value });
+        this.props.onChange(value, this.props.name);
     }
 
 }

@@ -1,11 +1,12 @@
 import * as React from "react";
 import * as _ from "lodash";
 import * as classNames from "classnames";
-import { ChangeEvent } from "react";
+
+import * as validators from "@shared/validators";
 
 const styles: any = require("./input.css");
 
-type InputTypes = "text" | "password" | "number" | "integer";
+type InputTypes = "text" | "password" | "number" | "integer" | "date";
 
 export type InputChangeHandler = (error: string, value: string, name: string) => void;
 
@@ -140,6 +141,13 @@ const internalValidators: { [key: string]: InputValidator } = {
     "integer": (value: string): string => {
         if (!/^\d+$/.test(value)) {
             return "Value should be a whole number";
+        }
+        return "";
+    },
+
+    "date": (value: string): string => {
+        if (!validators.isValidJsonDate(value)) {
+            return "Date should be in a format YYYY-MM-DD";
         }
         return "";
     }

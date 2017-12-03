@@ -8,7 +8,7 @@ import {
     BIKES_RECEIVED
 } from "../types";
 
-export const bikesFetch = () => {
+export const fetchBikes = () => {
     return dispatch => {
         dispatch(fetching());
         axios.get("/api/v1/bikes")
