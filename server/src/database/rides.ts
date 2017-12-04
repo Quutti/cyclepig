@@ -2,17 +2,19 @@ import * as DB from "easy-mysql-with-promise";
 import * as Promise from "bluebird";
 
 import { IDatabaseController, IDatabaseConnection, throwDatabaseControllerError } from "./common";
-import * as bikeHelpers from "../endpoints/bikes/helpers";
+import { bikeDatabaseController } from "./bikes";
 
-import { Ride } from "@shared/types";
+import { Ride, Bike } from "@shared/types";
 import * as validators from "@shared/validators";
 
 export class RideDatabaseController implements IDatabaseController<Ride> {
 
     private _db: IDatabaseConnection;
+    private _bikesDbCtrl: IDatabaseController<Bike>;
 
-    constructor(connection: IDatabaseConnection) {
+    constructor(connection: IDatabaseConnection, bikesDatabaseController: IDatabaseController<Bike>) {
         this._db = connection;
+        this._bikesDbCtrl = bikesDatabaseController;
     }
 
     public getSingle(userId: number, id: number): Promise<Ride> {
@@ -48,8 +50,9 @@ export class RideDatabaseController implements IDatabaseController<Ride> {
             throwDatabaseControllerError(validationMessage);
         }
 
-        return bikeHelpers.isUsersBike(userId, item.bikeId)
-            .then(isUsersBike => {
+        return this._bikesDbCtrl.getAll(userId)
+            .then(bikes => {
+                const isUsersBike = bikes.map(b => b.id).indexOf(item.bikeId) > -1;
                 if (!isUsersBike) {
                     throwDatabaseControllerError("Bike with given id not found");
                 }
@@ -106,4 +109,4 @@ export class RideDatabaseController implements IDatabaseController<Ride> {
     }
 }
 
-export const rideDatabaseController = new RideDatabaseController(DB);
+export const rideDatabaseController = new RideDatabaseController(DB, bikeDatabaseController);
