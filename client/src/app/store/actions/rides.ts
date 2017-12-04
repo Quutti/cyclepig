@@ -24,12 +24,8 @@ export const addRide = (ride: Ride) => {
     return dispatch => {
         axios.post("/api/v1/rides", ride)
             .then(res => {
-                axios.get(`/api/v1/rides/${res.data.payload.insertId}`)
-                    .then(res => {
-                        dispatch(receivedOne(res.data.payload));
-                        dispatch(addNotification({ title: "Saved" }));
-                    })
-                    .catch(err => dispatch(failure(err)))
+                dispatch(receivedOne(res.data.payload));
+                dispatch(addNotification({ title: "Saved" }));
             })
             .catch(err => dispatch(failure(err)));
     }
