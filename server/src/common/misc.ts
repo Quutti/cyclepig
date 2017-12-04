@@ -1,9 +1,15 @@
 import { Transaction } from './transaction';
+import { DatabaseControllerCustomError } from "../database/common";
 
 export const handleError = (err: any, transaction: Transaction) => {
+
+    if (err instanceof DatabaseControllerCustomError) {
+        return transaction.send.badRequest(err.message);
+    }
+
     let errorString = err.toString();
     console.log(`[500] ${errorString}`)
-    transaction.send.internalServerError();
+    return transaction.send.internalServerError();
 }
 
 export const getUniquesFromObjectArray = (arr: { [key: string]: any }[], prop: string): any[] => {

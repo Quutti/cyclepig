@@ -17,7 +17,7 @@ export default (function () {
         method: 'delete'
     });
 
-    /* Testing only */
+    /** @todo Remove! Testing only */
     authEndpoints.push({
         path: 'pass',
         handler: handlers.createPasswordHash,
