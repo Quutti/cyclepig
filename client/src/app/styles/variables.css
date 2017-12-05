@@ -5,7 +5,9 @@
     --font-size-base: 14px;
     --font-color-base: #333333;
 
-    --shadow: 2px 2px 15px 1px rgba(0, 0, 0, .10);
+    --border-radius-base: 3px;
+
+    --shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 
     --color-1: #4e7494;
 

@@ -3,10 +3,11 @@
 .root {
     background-color: white;
     box-shadow: var(--shadow);
+    border-radius: var(--border-radius-base);
 }
 
 .heading {
-    padding: 15px;;
+    padding: 15px 15px 0;
 }
 
 .headingText {
@@ -16,5 +17,5 @@
 }
 
 .body {
-    padding: 0 15px 15px;
+    padding: 15px 15px 15px;
 }

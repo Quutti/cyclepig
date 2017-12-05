@@ -7,6 +7,7 @@ interface OwnProps {
     md?: number;
     sm?: number;
     xs?: number;
+    className?: string;
 }
 
 export class Col extends React.Component<OwnProps, {}> {
@@ -16,11 +17,12 @@ export class Col extends React.Component<OwnProps, {}> {
         lg: 12,
         md: 12,
         sm: 12,
-        xs: 12
+        xs: 12,
+        className: ""
     }
 
     public render(): JSX.Element {
-        const { xl, lg, md, sm, xs } = this.props;
+        const { xl, lg, md, sm, xs, className } = this.props;
 
         const classes = [
             "col",
@@ -28,7 +30,8 @@ export class Col extends React.Component<OwnProps, {}> {
             `col-sm-${sm}`,
             `col-md-${md}`,
             `col-lg-${lg}`,
-            `col-xl-${xl}`
+            `col-xl-${xl}`,
+            ...className.split(" ")
         ].join(" ");
 
         return <div className={classes}>{this.props.children}</div>
