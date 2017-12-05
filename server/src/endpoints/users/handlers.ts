@@ -3,15 +3,10 @@ import { EndpointHandler } from '../../common/endpoint-group';
 import { Transaction } from '../../common/transaction';
 import { handleError } from '../../common/misc';
 
-import * as helpers from './helpers';
-import * as dbUsers from './db';
+import { userDatabaseController } from "../../database/users";
 
 export const me: EndpointHandler = (transaction: Transaction) => {
-    dbUsers.getUserById(transaction.user.id)
-        .then(rawUser => {
-            rawUser
-                ? transaction.send.ok(helpers.cleanSensitiveData(rawUser))
-                : transaction.send.unauthorized();
-        })
+    userDatabaseController.getSingle(transaction.user.id)
+        .then(user => user ? transaction.send.ok(user) : transaction.send.unauthorized())
         .catch(err => handleError(err, transaction));
 }

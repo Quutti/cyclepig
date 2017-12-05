@@ -1,8 +1,8 @@
 import * as express from 'express';
 
 import { EndpointHandler } from './endpoint-group';
-import * as dbUsers from '../endpoints/users/db';
-import * as auth from './auth';
+import { User } from "../database/users";
+import * as auth from "../auth/auth";
 import * as types from './types';
 import { Profiler } from './profiler';
 
@@ -41,7 +41,7 @@ export class Transaction {
     private _profiler: Profiler = null;
     private _req: types.Request;
     private _res: types.Response;
-    public user: dbUsers.User = null;
+    public user: User = null;
 
     constructor(request: types.Request, response: types.Response) {
         this._req = request;
