@@ -28,6 +28,11 @@ export const getWeekNumber = (date: Date): number => {
     return Math.ceil(((((todayMs - janFirstMs) / 8.64e7) + 1) / 7));
 }
 
+export const dateInMs = (date: Date): number => {
+    const d = new Date(date.valueOf());
+    d.setHours(0, 0, 0, 0);
+    return d.valueOf();
+}
 
 export const jsonDateToDate = (jsonDate: string): Date => {
     const parts = jsonDate.split("-");

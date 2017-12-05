@@ -10,7 +10,7 @@ import { authSignOut } from "../../store/actions/auth";
 import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
-import { Container, Col, Row, Card, Summary, LoadingContent } from "../../components";
+import { Container, Col, Row, Card, SummaryCard, LoadingContent } from "../../components";
 import { AddRideForm } from "./components";
 
 interface DashboardStoreProps {
@@ -43,37 +43,46 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
         const { rides } = this.props;
 
         let startDate = new Date();
-        if (rides.length > 0) {
-            startDate = dateUtils.jsonDateToDate(rides[0].date);
-        }
+        startDate.setDate(startDate.getDate() - 31);
 
         const res = getRidesSummary(rides, {
-            interval: "all",
+            interval: "monthly",
             startDate: startDate,
             endDate: new Date()
         });
 
-        const allRidesSummary = res[0];
+        const lastMonthSummary = res[res.length - 1];
 
         return (
             <div>
                 <LoadingContent loading={this.props.isFetching}>
                     <Container>
+
                         <Row>
-                            <Col xl={8} lg={8} md={8}>
+                            <Col xl={8} lg={8} className="mb-4">
+                                <Row>
+                                    <Col xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
+                                        <SummaryCard label={"Km's this month"} value={lastMonthSummary.distance.toFixed(2)} backgroundColor="#4e7494" icon="bar-chart" />
+                                    </Col>
+
+                                    <Col xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
+                                        <SummaryCard label={"Rides this month"} value={`${lastMonthSummary.rides}`} backgroundColor="#4e7494" icon="bicycle" />
+                                    </Col>
+                                </Row>
+
+                                <Row>
+                                    <Col>
+                                        <Card heading="Pulse" />
+                                    </Col>
+
+                                </Row>
                             </Col>
-                            <Col xl={4} lg={4} md={4}>
-
-                                <Card heading="Summary (all time)" className="mb-3">
-                                    <Summary label={"Total rides"} value={`${allRidesSummary.rides}`} />
-                                    <Summary label={"Total kms"} value={allRidesSummary.distance.toFixed(2)} />
-                                </Card>
-
+                            <Col xl={4} lg={4}>
                                 <Card heading="Add ride">
                                     <AddRideForm dispatch={this.props.dispatch} bikes={this.props.bikes} />
                                 </Card>
-
                             </Col>
+
                         </Row>
                     </Container>
                 </LoadingContent>

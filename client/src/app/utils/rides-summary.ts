@@ -1,6 +1,7 @@
 
 import { Ride } from "../store/types";
 import * as dateUtils from "@shared/date-utils";
+import { dateInMs } from "@shared/date-utils";
 
 export type RidesSummaryInterval = "daily" | "weekly" | "monthly" | "yearly" | "all";
 
@@ -22,31 +23,33 @@ export interface RidesSummaryItem {
 }
 
 export const getRidesSummary = (rides: Ride[], options: RidesSummaryOptions): RidesSummaryItem[] => {
-
     const res: RidesSummaryItem[] = [];
 
     const labeler = getLabeler(options.interval);
-    const dateModifier = getDateModifier(options.interval);
 
     const labelMap: string[] = [];
+    const endDateMs = dateInMs(options.endDate);
 
     let currentDate = new Date(options.startDate.valueOf());
-    while (currentDate.valueOf() <= options.endDate.valueOf()) {
+    while (dateInMs(currentDate) <= endDateMs) {
         const label = labeler(currentDate);
-        res.push({
-            label,
-            distance: 0,
-            rides: 0
-        });
 
-        labelMap.push(label);
+        if (labelMap.indexOf(label) === -1) {
+            res.push({
+                label,
+                distance: 0,
+                rides: 0
+            });
 
-        // If interval is all break after first iteration
-        if (options.interval === "all") {
-            break;
+            labelMap.push(label);
+
+            // If interval is all break after first iteration
+            if (options.interval === "all") {
+                break;
+            }
         }
 
-        currentDate = dateModifier(currentDate);
+        currentDate.setDate(currentDate.getDate() + 1);
     }
 
     for (let ride of rides) {
@@ -85,21 +88,5 @@ const getLabeler = (interval: RidesSummaryInterval): RidesSummaryLabeler => {
             const m = prefix(date.getMonth() + 1);
             return `${date.getFullYear()}-${m}-${d}`;
         }
-    }
-}
-
-const getDateModifier = (interval: RidesSummaryInterval): RidesSummaryModifier => {
-    return (date: Date) => {
-        const d = new Date(date.valueOf());
-        if (interval === "yearly") {
-            d.setFullYear(date.getFullYear() + 1);
-        } else if (interval === "monthly") {
-            d.setMonth(date.getMonth() + 1);
-        } else if (interval === "weekly") {
-            d.setDate(date.getDate() + 7);
-        } else {
-            d.setDate(date.getDate() + 1);
-        }
-        return d;
     }
 }

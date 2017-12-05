@@ -1,0 +1,37 @@
+@import "../../styles/variables.css";
+
+.root {
+    padding: 0;
+}
+
+.wrapper {
+    position: relative;
+    margin: -15px;
+    padding: 25px;
+    overflow: hidden;
+    border-radius: var(--border-radius-base);
+}
+
+.icon {
+    position: absolute;
+    font-size: 8rem;
+    transform: rotate(15deg);
+    bottom: -15px;
+    right: -15px;
+}
+
+.label {
+    position: relative;
+    z-index: 1;
+    font-size: 1rem;
+    text-shadow: var(--shadow);
+}
+
+.value {
+    line-height: 100%;
+    margin-bottom: 5px;
+    z-index: 1;
+    position: relative;
+    font-size: 3rem;
+    text-shadow: var(--shadow);
+}
