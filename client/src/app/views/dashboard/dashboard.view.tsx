@@ -11,6 +11,7 @@ import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
 import { Container, Col, Row, Card, SummaryCard, LoadingContent } from "../../components";
+import { LineChart, LineChartLine, LineChartPoint } from "../../components/line-chart";
 import { AddRideForm } from "./components";
 
 interface DashboardStoreProps {
@@ -39,11 +40,12 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
     }
 
     public render(): JSX.Element {
-
         const { rides } = this.props;
 
         let startDate = new Date();
-        startDate.setDate(startDate.getDate() - 31);
+        if (rides.length) {
+            startDate = dateUtils.jsonDateToDate(rides[0].date);
+        }
 
         const res = getRidesSummary(rides, {
             interval: "monthly",
@@ -53,8 +55,27 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
 
         const lastMonthSummary = res[res.length - 1];
 
+        const lines: LineChartLine[] = [{
+            color: "red",
+            data: res.map(sum => {
+                const nums = sum.label.split("/").map(p => parseInt(p), 10);
+                nums.unshift(1);
+                nums[1] -= 1;
+
+                return {
+                    date: new Date(...nums.reverse()),
+                    value: sum.distance
+                }
+            })
+        }];
+
         return (
             <div>
+                <div className="mb-5">
+                    <button onClick={() => this.props.dispatch(authSignOut())}>Sign out</button>
+                </div>
+
+
                 <LoadingContent loading={this.props.isFetching}>
                     <Container>
 
@@ -72,7 +93,9 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
 
                                 <Row>
                                     <Col>
-                                        <Card heading="Pulse" />
+                                        <Card heading="Pulse">
+                                            <LineChart lines={lines} />
+                                        </Card>
                                     </Col>
 
                                 </Row>
