@@ -1,0 +1,30 @@
+@import "../../styles/variables.css";
+
+.root {
+    opacity: 1;
+    transition: opacity .2s ease;
+    position: relative;
+
+    &.fading {
+        opacity: 0;
+    }
+}
+
+.linePath {
+    stroke-width: 2px;
+    stroke: var(--color-1);
+    fill: transparent;
+}
+
+.axisGroup {
+    & line {
+        stroke-width: 1px;
+        color: #aaa;
+        opacity: 0.1;
+        shape-rendering: crispEdges
+    }
+
+    & path {
+        stroke: transparent;
+    }
+}
