@@ -9,6 +9,7 @@
     "axios": "^0.17.0",
     "bootstrap": "^4.0.0-beta",
     "classnames": "^2.2.5",
+    "d3": "^4.12.0",
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "object-assign": "^4.1.1",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/classnames": "^2.2.3",
+    "@types/d3": "^4.12.0",
     "@types/lodash": "^4.14.80",
     "@types/object-assign": "^4.0.30",
     "@types/react": "^16.0.19",
@@ -56,4 +58,3 @@
     "dev": "npm run clean && npm run dev-prebuild-webpack && npm run dev-server"
   }
 }
-
