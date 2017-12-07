@@ -100,12 +100,12 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
             .attr('height', this.props.height)
             .attr('width', "100%");
 
-
         this._mainG = this._svg.append("g")
             .attr('transform', `translate(0, 0)`);
 
+        // Group to serve as a wrapper for line paths
         this._pathsG = this._mainG.append("g")
-            .attr("transform", `translate(${MARGIN}, ${MARGIN})`)
+            .attr("transform", `translate(${MARGIN}, 0)`)
 
         const domains = this._getDomains();
         const width = containerOffsetWidth - MARGIN * 2;
@@ -116,18 +116,16 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
 
         this._axes.x = this._mainG.append("g")
             .attr("class", styles.axisGroup)
-            .attr("transform", `translate(${MARGIN}, ${MARGIN + height})`)
+            .attr("transform", `translate(${MARGIN}, ${height})`)
             .call(d3.axisBottom(this._scales.x).ticks(4));
 
         this._axes.y = this._mainG.append("g")
             .attr("class", styles.axisGroup)
-            .attr("transform", `translate(${MARGIN}, ${MARGIN})`)
+            .attr("transform", `translate(${MARGIN}, 0)`)
             .call(this._getAxisLeft());
     }
 
     private _updateChart(animate: boolean = true) {
-
-
         const domains = this._getDomains();
         this._scales.x.domain(domains.x);
         this._scales.y.domain(domains.y);
@@ -138,16 +136,19 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
         const data = this.props.lines.map(line => line.data);
 
         const update = this._pathsG.selectAll(`.${styles.linePath}`).data(data);
+
+        // Remove removed lines
         update.exit().remove();
 
+        // Update existing lines
         const existingLines = this._pathsG.selectAll(`.${styles.linePath}`);
-
         if (animate) {
             existingLines.transition().duration(750).attr("d", this._getLine());
         } else {
             existingLines.attr("d", this._getLine());
         }
 
+        // Add new lines
         const newLines = update.enter().append("path").attr("class", styles.linePath);
         if (animate) {
             newLines.attr("d", this._getLine(this._getInnerHeight()) as any)
@@ -202,23 +203,20 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     }
 
     private _getInnerHeight(): number {
-        return this.props.height - MARGIN * 2;
+        return this.props.height - MARGIN;
     }
 
     private _getDomains(): XY<number[], number[]> {
         const dateBoundaries = this._getDateBoundaries();
-        const domainX = [
+        const x = [
             dateBoundaries.min.valueOf(),
             dateBoundaries.max.valueOf()
         ];
 
         const maxPoints = this._getMaxValue() * 1.1;
-        const domainY = [0, maxPoints];
+        const y = [0, maxPoints];
 
-        return {
-            x: domainX,
-            y: domainY
-        }
+        return { x, y };
     }
 
     private _getDateBoundaries(): MinMax<Date> {
