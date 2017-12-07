@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Redux from 'redux';
 import { connect } from 'react-redux';
+import * as d3 from "d3";
 
 import { RootState, Ride, Bike } from '../../store/types';
 import { fetchBikes } from "../../store/actions/bikes";
@@ -94,7 +95,10 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
                                 <Row>
                                     <Col>
                                         <Card heading="Pulse">
-                                            <LineChart lines={lines} />
+                                            <LineChart
+                                                lines={lines}
+                                                curve={d3.curveCatmullRom.alpha(1)}
+                                            />
                                         </Card>
                                     </Col>
 

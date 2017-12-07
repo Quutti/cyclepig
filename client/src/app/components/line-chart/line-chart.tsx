@@ -7,6 +7,7 @@ const styles: any = require("./line-chart.css");
 export interface LineChartLine {
     color: string;
     data: LineChartPoint[];
+    curve?: d3.CurveFactory;
 }
 
 export interface LineChartPoint {
@@ -16,6 +17,7 @@ export interface LineChartPoint {
 
 interface OwnProps {
     height?: number;
+    curve?: d3.CurveFactory;
     lines: LineChartLine[];
 }
 
@@ -40,7 +42,8 @@ type D3Element = d3.Selection<d3.BaseType, {}, null, undefined>;
 export class LineChart extends React.Component<OwnProps, OwnState> {
 
     static defaultProps: Partial<OwnProps> = {
-        height: 250
+        height: 250,
+        curve: d3.curveLinear
     }
 
     private _timeoutHandle: any;
@@ -186,8 +189,10 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     }
 
     private _getLine(fixedYPos?: number): d3.Line<[number, number]> {
+        const { curve } = this.props;
+
         return d3.line()
-            .curve(d3.curveCatmullRom.alpha(1))
+            .curve(curve)
             .x((d: any) => {
                 const data = d as LineChartPoint;
                 return this._scales.x(data.date.valueOf());
