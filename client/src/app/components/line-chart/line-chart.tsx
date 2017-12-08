@@ -159,6 +159,8 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     private _removeChart() {
         this._svg.remove();
         this._svg = null;
+
+        this._lineGs = [];
     }
 
     private _updatePaths(animate: boolean) {
