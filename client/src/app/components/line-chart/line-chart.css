@@ -16,6 +16,10 @@
     fill: transparent;
 }
 
+.linePathDot {
+    r: 3.5;
+}
+
 .axisGroup {
     & line {
         stroke-width: 1px;

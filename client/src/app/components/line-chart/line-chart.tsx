@@ -19,6 +19,8 @@ interface OwnProps {
     height?: number;
     curve?: d3.CurveFactory;
     yTickCount?: number;
+    animationDuration?: number;
+    showDots?: boolean;
     lines: LineChartLine[];
 }
 
@@ -37,26 +39,33 @@ interface XY<t1, t2> {
 }
 
 const MARGIN = 30;
+const CHART_PADDING = 5;
 
-type D3Element = d3.Selection<d3.BaseType, {}, null, undefined>;
+type D3SelectionElement = d3.Selection<d3.BaseType, any, any, any>;
+type D3TransitionElement = d3.Transition<d3.BaseType, any, any, any>;
+
+type D3Element = D3SelectionElement | D3TransitionElement;
 
 export class LineChart extends React.Component<OwnProps, OwnState> {
 
     static defaultProps: Partial<OwnProps> = {
         height: 250,
-        curve: d3.curveLinear
+        curve: d3.curveLinear,
         yTickCount: 5,
+        showDots: true,
+        animationDuration: 750
     }
 
     private _timeoutHandle: any;
 
     private _containerRef: HTMLDivElement = null;
 
-    private _svg: D3Element = null;
-    private _mainG: D3Element = null;
-    private _pathsG: D3Element = null;
+    private _svg: D3SelectionElement = null;
+    private _mainG: D3SelectionElement = null;
+    private _pathsG: D3SelectionElement = null;
+    private _lineGs: D3SelectionElement[] = [];
     private _scales: XY<d3.ScaleTime<number, number>, d3.ScaleLinear<number, number>> = { x: null, y: null };
-    private _axes: XY<D3Element, D3Element> = { x: null, y: null };
+    private _axes: XY<D3SelectionElement, D3SelectionElement> = { x: null, y: null };
 
     constructor(props) {
         super(props);
@@ -97,8 +106,8 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     }
 
     private _createChart() {
+        // self -- my old friend
         const self = this;
-
         const containerOffsetWidth = this._containerRef.offsetWidth;
 
         this._svg = d3.select(this._containerRef).append("svg")
@@ -116,7 +125,7 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
         const width = containerOffsetWidth - MARGIN * 2;
         const height = this._getInnerHeight();
 
-        this._scales.x = d3.scaleTime().domain(domains.x).rangeRound([0, width]);
+        this._scales.x = d3.scaleTime().domain(domains.x).rangeRound([CHART_PADDING, width - CHART_PADDING]);
         this._scales.y = d3.scaleLinear().domain(domains.y).rangeRound([height, 0]);
 
         this._axes.x = this._mainG.append("g")
@@ -131,6 +140,9 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     }
 
     private _updateChart(animate: boolean = true) {
+
+        const { showDots, animationDuration } = this.props;
+
         const domains = this._getDomains();
         this._scales.x.domain(domains.x);
         this._scales.y.domain(domains.y);
@@ -138,36 +150,91 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
         this._axes.x.transition().call(d3.axisBottom(this._scales.x).ticks(4) as any);
         this._axes.y.transition().call(this._getAxisLeft() as any);
 
-        const data = this.props.lines.map(line => line.data);
-
-        const update = this._pathsG.selectAll(`.${styles.linePath}`).data(data);
-
-        // Remove removed lines
-        update.exit().remove();
-
-        // Update existing lines
-        const existingLines = this._pathsG.selectAll(`.${styles.linePath}`);
-        if (animate) {
-            existingLines.transition().duration(750).attr("d", this._getLine());
-        } else {
-            existingLines.attr("d", this._getLine());
-        }
-
-        // Add new lines
-        const newLines = update.enter().append("path").attr("class", styles.linePath);
-        if (animate) {
-            newLines.attr("d", this._getLine(this._getInnerHeight()) as any)
-                .transition()
-                .duration(750)
-                .attr("d", this._getLine() as any)
-        } else {
-            newLines.attr("d", this._getLine() as any);
+        this._updatePaths(animate);
+        if (showDots) {
+            this._updateDots(animate);
         }
     }
 
     private _removeChart() {
         this._svg.remove();
         this._svg = null;
+    }
+
+    private _updatePaths(animate: boolean) {
+
+        const setD = (elems: D3Element, fromBottom: boolean = false) => {
+            const a = fromBottom ? this._getInnerHeight() : undefined;
+            return elems.attr("d", this._getLine(a));
+        }
+
+        const { lines, animationDuration } = this.props;
+        const data = lines.map(l => l.data);
+
+        const updatePaths = this._pathsG.selectAll(`.${styles.linePath}`).data(data);
+
+        // Remove removed lines
+        updatePaths.exit().remove();
+
+        const existingLines = this._pathsG.selectAll(`.${styles.linePath}`);
+        const newLines = updatePaths.enter().append("path").attr("class", styles.linePath);
+
+        if (animate) {
+            // Add and animate new lines
+            const elems = setD(newLines, true);
+            setD(elems.transition().duration(animationDuration));
+            // and update existing ones
+            setD(existingLines.transition().duration(animationDuration));
+        } else {
+            setD(newLines);
+            setD(existingLines);
+        }
+    }
+
+    private _updateDots(animate: boolean) {
+
+        const setCXCY = (elems: D3Element, fromBottom: boolean = false): D3Element => {
+            return elems
+                .attr("cx", (d: LineChartPoint, index) => this._scales.x(d.date))
+                .attr("cy", (d: LineChartPoint, index) => {
+                    return (fromBottom) ? this._getInnerHeight() : this._scales.y(d.value);
+                });
+        }
+
+        const { lines, animationDuration } = this.props;
+
+        // Create g :s for every new path to wrap
+        // dots for that path
+        this.props.lines.forEach((d, index) => {
+            if (!this._lineGs[index]) {
+                this._lineGs[index] = this._pathsG.append("g");
+            }
+        });
+
+        lines.forEach((line, index) => {
+            const lineG = this._lineGs[index];
+            const updateDots = lineG.selectAll(`.${styles.linePathDot}`).data(line.data);
+
+            // Remove existing dots
+            updateDots.exit().remove();
+
+            const existingDots = lineG.selectAll(`.${styles.linePathDot}`) as D3SelectionElement;
+            const newDots = updateDots.enter().append("circle").attr("class", styles.linePathDot);
+
+            if (animate) {
+                // Animate existing dots to their new positions
+                setCXCY(existingDots.transition().duration(animationDuration));
+
+                // Then set new dots to the point where we want them
+                // to be when animation begins
+                const trans = setCXCY(newDots, true);
+                // ... and animate
+                setCXCY(trans.transition().duration(animationDuration));
+            } else {
+                setCXCY(existingDots);
+                setCXCY(newDots);
+            }
+        });
     }
 
     private _handleWindowResize() {
