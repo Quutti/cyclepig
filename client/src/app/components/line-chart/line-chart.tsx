@@ -18,6 +18,7 @@ export interface LineChartPoint {
 interface OwnProps {
     height?: number;
     curve?: d3.CurveFactory;
+    yTickCount?: number;
     lines: LineChartLine[];
 }
 
@@ -44,6 +45,7 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     static defaultProps: Partial<OwnProps> = {
         height: 250,
         curve: d3.curveLinear
+        yTickCount: 5,
     }
 
     private _timeoutHandle: any;
@@ -258,7 +260,17 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
     }
 
     private _getAxisLeft(): d3.Axis<number | { valueOf(): number; }> {
-        return d3.axisLeft(this._scales.y).tickPadding(7).tickSize(-this._containerRef.offsetWidth + 2 * MARGIN);
+        const { yTickCount } = this.props;
+
+        return d3.axisLeft(this._scales.y)
+            .tickFormat(this._shortenValue as any)
+            .tickPadding(7)
+            .ticks(yTickCount)
+            .tickSize(-this._containerRef.offsetWidth + 2 * MARGIN);
+    }
+
+    private _shortenValue(value: number): string {
+        return (value > 1000) ? `${Math.ceil(value / 1000)}k` : `${value}`;
     }
 
 }
