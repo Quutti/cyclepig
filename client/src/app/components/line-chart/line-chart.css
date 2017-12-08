@@ -12,7 +12,6 @@
 
 .linePath {
     stroke-width: 2px;
-    stroke: var(--color-1);
     fill: transparent;
 }
 

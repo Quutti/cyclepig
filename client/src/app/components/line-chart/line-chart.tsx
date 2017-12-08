@@ -179,7 +179,15 @@ export class LineChart extends React.Component<OwnProps, OwnState> {
         updatePaths.exit().remove();
 
         const existingLines = this._pathsG.selectAll(`.${styles.linePath}`);
+        const existingLineCount = existingLines.nodes().length;
         const newLines = updatePaths.enter().append("path").attr("class", styles.linePath);
+
+        newLines.nodes().forEach((node, index) => {
+            const line = lines[existingLineCount + index];
+            /** @todo get default color from css variables when possible */
+            const lineColor = (line) ? line.color : "#4e7494";
+            d3.select(node).attr("stroke", lineColor);
+        });
 
         if (animate) {
             // Add and animate new lines
