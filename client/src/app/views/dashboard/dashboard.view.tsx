@@ -11,8 +11,8 @@ import { authSignOut } from "../../store/actions/auth";
 import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
-import { Card } from "qruut";
-import { Container, Col, Row, SummaryCard, LoadingContent } from "../../components";
+import { Card, GridContainer, GridCol, GridRow } from "qruut/dist";
+import { SummaryCard, LoadingContent } from "../../components";
 import { LineChart, LineChartLine, LineChartPoint } from "../../components/line-chart";
 import { AddRideForm } from "./components";
 
@@ -49,27 +49,36 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
             startDate = dateUtils.jsonDateToDate(rides[0].date);
         }
 
-        const res = getRidesSummary(rides, {
+        const res = [getRidesSummary(rides, {
             interval: "monthly",
             startDate: startDate,
-            endDate: new Date()
+            endDate: new Date(),
+            bikeId: 1
+        }), getRidesSummary(rides, {
+            interval: "monthly",
+            startDate: startDate,
+            endDate: new Date(),
+            bikeId: 2
+        })];
+
+        //const lastMonthSummary = res[0][res.length - 1];
+        const colors = ["#f59b42", "#4e7494"];
+        const lines: LineChartLine[] = res.map((r, i) => {
+            return {
+                color: colors[i],
+                data: r.map(sum => {
+                    const nums = sum.label.split("/").map(p => parseInt(p), 10);
+                    nums.unshift(1);
+                    nums[1] -= 1;
+
+                    return {
+                        date: new Date(...nums.reverse()),
+                        value: sum.distance
+                    }
+                })
+
+            };
         });
-
-        const lastMonthSummary = res[res.length - 1];
-
-        const lines: LineChartLine[] = [{
-            color: "red",
-            data: res.map(sum => {
-                const nums = sum.label.split("/").map(p => parseInt(p), 10);
-                nums.unshift(1);
-                nums[1] -= 1;
-
-                return {
-                    date: new Date(...nums.reverse()),
-                    value: sum.distance
-                }
-            })
-        }];
 
         return (
             <div>
@@ -79,40 +88,38 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
 
 
                 <LoadingContent loading={this.props.isFetching}>
-                    <Container>
-
-                        <Row>
-                            <Col xl={8} lg={8} className="mb-4">
-                                <Row>
-                                    <Col xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
+                    <GridContainer>
+                        <GridRow>
+                            <GridCol xl={8} lg={8} className="mb-4">
+                                <GridRow>
+                                    {/*
+                                    <GridCol xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
                                         <SummaryCard label={"Km's this month"} value={lastMonthSummary.distance.toFixed(2)} backgroundColor="#4e7494" icon="bar-chart" />
-                                    </Col>
+                                    </GridCol>
 
-                                    <Col xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
+                                    <GridCol xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
                                         <SummaryCard label={"Rides this month"} value={`${lastMonthSummary.rides}`} backgroundColor="#4e7494" icon="bicycle" />
-                                    </Col>
-                                </Row>
+                                    </GridCol>
+        */}
+                                </GridRow>
 
-                                <Row>
-                                    <Col>
-                                        <Card heading="Pulse">
-                                            <LineChart
-                                                lines={lines}
-                                                curve={d3.curveCatmullRom.alpha(1)}
-                                            />
+                                <GridRow>
+                                    <GridCol>
+                                        <Card  heading="Pulse">
+                                            <LineChart lines={lines} />
                                         </Card>
-                                    </Col>
+                                    </GridCol>
 
-                                </Row>
-                            </Col>
-                            <Col xl={4} lg={4}>
-                                <Card heading="Add ride">
+                                </GridRow>
+                            </GridCol>
+                            <GridCol xl={4} lg={4}>
+                                <Card heading="Add new ride">
                                     <AddRideForm dispatch={this.props.dispatch} bikes={this.props.bikes} />
                                 </Card>
-                            </Col>
+                            </GridCol>
 
-                        </Row>
-                    </Container>
+                        </GridRow>
+                    </GridContainer>
                 </LoadingContent>
             </div>
         );

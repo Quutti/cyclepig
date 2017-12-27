@@ -6,6 +6,7 @@ import { RootState, Bike, Ride } from "../../../../store/types";
 import { addRide } from "../../../../store/actions/rides";
 import { addNotification } from "../../../../store/actions/notifications";
 
+import { GridCol, GridRow } from "qruut/dist";
 import { Select, SelectItem, Input, Button } from "../../../../components";
 
 interface OwnProps {
@@ -52,8 +53,14 @@ export class AddRideForm extends React.Component<OwnProps, OwnState> {
             <form>
                 <Select label="Bike" name="bikeId" onChange={this._handleSelectChange} items={bikeItems} />
                 <Input label="Description" value={this.state.description} name="description" onChange={this._handleInputChange} />
-                <Input label="Distance" value={`${this.state.distance || ""}`} type="number" name="distance" onChange={this._handleInputChange} />
-                <Input label="Date" value={this.state.date} name="date" type="date" defaultValue={today} onChange={this._handleInputChange} />
+                <GridRow>
+                    <GridCol xl={5} lg={5} md={5} sm={5}>
+                        <Input label="Distance" value={`${this.state.distance || ""}`} type="number" name="distance" onChange={this._handleInputChange} />
+                    </GridCol>
+                    <GridCol xl={7} lg={7} md={7} sm={7}>
+                        <Input label="Date" value={this.state.date} name="date" type="date" defaultValue={today} onChange={this._handleInputChange} />
+                    </GridCol>
+                </GridRow>
                 <div className="text-right">
                     <Button primary={true} text="Save" disabled={saveDisabled} onClick={this._handleSubmitClick} />
                 </div>

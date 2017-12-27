@@ -2,9 +2,6 @@
 export * from "./navigation-bar";
 export * from "./notifications";
 
-/* Containers */
-export * from "./grid";
-
 /* Forms */
 export * from "./input";
 export * from "./button";
