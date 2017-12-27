@@ -11,7 +11,8 @@ import { authSignOut } from "../../store/actions/auth";
 import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
-import { Container, Col, Row, Card, SummaryCard, LoadingContent } from "../../components";
+import { Card } from "qruut";
+import { Container, Col, Row, SummaryCard, LoadingContent } from "../../components";
 import { LineChart, LineChartLine, LineChartPoint } from "../../components/line-chart";
 import { AddRideForm } from "./components";
 

@@ -6,7 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { RootState } from '../../store/types';
 import { authSignIn } from "../../store/actions/auth";
 
-import { Card, Input, Button, LoadingContent } from "../../components";
+import { Card } from "qruut";
+import { Input, Button, LoadingContent } from "../../components";
 
 interface StoreProps {
     isLoggedIn: boolean;

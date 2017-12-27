@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as colorUtils from "../../utils/colors";
-import { Card } from "../card";
+import { Card } from "qruut";
 
 const styles: any = require("./summary-card.css");
 
