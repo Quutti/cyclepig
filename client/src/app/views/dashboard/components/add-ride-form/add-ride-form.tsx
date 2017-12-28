@@ -6,7 +6,7 @@ import { RootState, Bike, Ride } from "../../../../store/types";
 import { addRide } from "../../../../store/actions/rides";
 import { addNotification } from "../../../../store/actions/notifications";
 
-import { GridCol, GridRow } from "qruut/dist";
+import { GridCol, GridRow } from "qruut";
 import { Select, SelectItem, Input, Button } from "../../../../components";
 
 interface OwnProps {

@@ -11,9 +11,8 @@ import { authSignOut } from "../../store/actions/auth";
 import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
-import { Card, GridContainer, GridCol, GridRow } from "qruut/dist";
+import { Card, GridContainer, GridCol, GridRow, LineChart, LineChartLine } from "qruut";
 import { SummaryCard, LoadingContent } from "../../components";
-import { LineChart, LineChartLine, LineChartPoint } from "../../components/line-chart";
 import { AddRideForm } from "./components";
 
 interface DashboardStoreProps {

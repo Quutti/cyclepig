@@ -10,4 +10,3 @@ export * from "./select";
 /* Misc */
 export * from "./loading";
 export * from "./summary-card";
-export * from "./line-chart";
