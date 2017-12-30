@@ -1,13 +1,11 @@
-@import "../../styles/variables.css";
-
 .root {
-    background-color: var(--navigation-bar-bg);
-    height: var(--navigation-bar-height);
+    background-color: $navigation-bar-bg;
+    height: $navigation-bar-height;
     padding: 0 20px;
 }
 
 .title {
-    line-height: var(--navigation-bar-height);
+    line-height: $navigation-bar-height;
     letter-spacing: 1px;
     font-size: 1.25rem;
     color: white;

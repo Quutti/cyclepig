@@ -1,5 +1,3 @@
-@import "../../styles/variables.css";
-
 .root {
 
 }
@@ -22,8 +20,8 @@
 }
 
 .hasError {
-    box-shadow: inset 0px -4px 0px 0px var(--error-color);
-    outline-color: var(--error-color);
+    box-shadow: inset 0px -4px 0px 0px $error-color;
+    outline-color: $error-color;
 }
 
 .feedback {

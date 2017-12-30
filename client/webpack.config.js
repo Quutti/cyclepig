@@ -61,7 +61,12 @@ module.exports = function getWebpackConfigs(env = {}) {
                         loader: 'css-loader',
                         options: { importLoaders: 1, module: true, localIdentName: '[name]__[local]___[hash:base64:5]' }
                     },
-                    'postcss-loader'
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            config: { path: path.resolve(__dirname, "postcss.config.js") }
+                        }
+                    }
                 ]
             })
         }, {
