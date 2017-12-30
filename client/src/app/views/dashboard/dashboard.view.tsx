@@ -48,6 +48,12 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
             startDate = dateUtils.jsonDateToDate(rides[0].date);
         }
 
+        const overall = getRidesSummary(rides, {
+            interval: "all",
+            startDate: startDate,
+            endDate: new Date()
+        })[0];
+
         const res = [getRidesSummary(rides, {
             interval: "monthly",
             startDate: startDate,
@@ -91,20 +97,18 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
                         <GridRow>
                             <GridCol xl={8} lg={8} className="mb-4">
                                 <GridRow>
-                                    {/*
                                     <GridCol xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
-                                        <SummaryCard label={"Km's this month"} value={lastMonthSummary.distance.toFixed(2)} backgroundColor="#4e7494" icon="bar-chart" />
+                                        <SummaryCard label={"Total kilometers"} value={overall.distance.toFixed(2)} backgroundColor="#4e7494" icon="bar-chart" />
                                     </GridCol>
 
                                     <GridCol xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
-                                        <SummaryCard label={"Rides this month"} value={`${lastMonthSummary.rides}`} backgroundColor="#4e7494" icon="bicycle" />
+                                        <SummaryCard label={"Total rides"} value={`${overall.rides}`} backgroundColor="#4e7494" icon="bicycle" />
                                     </GridCol>
-        */}
                                 </GridRow>
 
                                 <GridRow>
                                     <GridCol>
-                                        <Card  heading="Pulse">
+                                        <Card heading="Pulse">
                                             <LineChart lines={lines} />
                                         </Card>
                                     </GridCol>
