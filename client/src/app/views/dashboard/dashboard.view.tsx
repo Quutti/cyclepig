@@ -41,47 +41,39 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
     }
 
     public render(): JSX.Element {
-        const { rides } = this.props;
+        const { rides, bikes } = this.props;
 
         let startDate = new Date();
         if (rides.length) {
             startDate = dateUtils.jsonDateToDate(rides[0].date);
         }
+        const endDate = new Date();
 
-        const overall = getRidesSummary(rides, {
-            interval: "all",
-            startDate: startDate,
-            endDate: new Date()
+        const overallSummary = getRidesSummary(rides, {
+            startDate,
+            endDate,
+            interval: "all"
         })[0];
 
-        const res = [getRidesSummary(rides, {
-            interval: "monthly",
-            startDate: startDate,
-            endDate: new Date(),
-            bikeId: 1
-        }), getRidesSummary(rides, {
-            interval: "monthly",
-            startDate: startDate,
-            endDate: new Date(),
-            bikeId: 2
-        })];
+        const monthlySummaries = bikes.map(bike => {
+            return getRidesSummary(rides, {
+                startDate,
+                endDate,
+                interval: "monthly",
+                bikeId: bike.id
+            });
+        });
 
-        //const lastMonthSummary = res[0][res.length - 1];
-        const colors = ["#f59b42", "#4e7494"];
-        const lines: LineChartLine[] = res.map((r, i) => {
+        const lineColors = bikes.map(bike => bike.color);
+        const lineChartLines: LineChartLine[] = monthlySummaries.map((month, i) => {
             return {
-                color: colors[i],
-                data: r.map(sum => {
-                    const nums = sum.label.split("/").map(p => parseInt(p), 10);
-                    nums.unshift(1);
-                    nums[1] -= 1;
-
+                color: lineColors[i],
+                data: month.map(item => {
                     return {
-                        date: new Date(...nums.reverse()),
-                        value: sum.distance
+                        date: item.date,
+                        value: item.distance
                     }
                 })
-
             };
         });
 
@@ -98,18 +90,18 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
                             <GridCol xl={8} lg={8} className="mb-4">
                                 <GridRow>
                                     <GridCol xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
-                                        <SummaryCard label={"Total kilometers"} value={overall.distance.toFixed(2)} backgroundColor="#4e7494" icon="bar-chart" />
+                                        <SummaryCard label={"Total kilometers"} value={overallSummary.distance.toFixed(2)} backgroundColor="#4e7494" icon="bar-chart" />
                                     </GridCol>
 
                                     <GridCol xl={6} lg={6} md={6} sm={6} xs={12} className="mb-4">
-                                        <SummaryCard label={"Total rides"} value={`${overall.rides}`} backgroundColor="#4e7494" icon="bicycle" />
+                                        <SummaryCard label={"Total rides"} value={`${overallSummary.rides}`} backgroundColor="#4e7494" icon="bicycle" />
                                     </GridCol>
                                 </GridRow>
 
                                 <GridRow>
                                     <GridCol>
                                         <Card heading="Pulse">
-                                            <LineChart lines={lines} />
+                                            <LineChart lines={lineChartLines} />
                                         </Card>
                                     </GridCol>
 

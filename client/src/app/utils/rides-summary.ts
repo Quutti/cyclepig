@@ -18,6 +18,7 @@ export type RidesSummaryModifier = (date: Date) => Date;
 
 export interface RidesSummaryItem {
     label: string;
+    date: Date;
     distance: number;
     rides: number;
 }
@@ -36,6 +37,7 @@ export const getRidesSummary = (rides: Ride[], options: RidesSummaryOptions): Ri
 
         if (labelMap.indexOf(label) === -1) {
             res.push({
+                date: new Date(currentDate.valueOf()),
                 label,
                 distance: 0,
                 rides: 0
