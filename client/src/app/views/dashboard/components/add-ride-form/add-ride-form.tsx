@@ -6,8 +6,8 @@ import { RootState, Bike, Ride } from "../../../../store/types";
 import { addRide } from "../../../../store/actions/rides";
 import { addNotification } from "../../../../store/actions/notifications";
 
-import { GridCol, GridRow } from "qruut";
-import { Select, SelectItem, Input, Button } from "../../../../components";
+import { GridCol, GridRow, Button } from "qruut";
+import { Select, SelectItem, Input } from "../../../../components";
 
 interface OwnProps {
     bikes: Bike[];
@@ -62,7 +62,7 @@ export class AddRideForm extends React.Component<OwnProps, OwnState> {
                     </GridCol>
                 </GridRow>
                 <div className="text-right">
-                    <Button primary={true} text="Save" disabled={saveDisabled} onClick={this._handleSubmitClick} />
+                    <Button text="Save" disabled={saveDisabled} onClick={this._handleSubmitClick} />
                 </div>
             </form>
         )

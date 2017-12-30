@@ -6,8 +6,8 @@ import { Redirect } from 'react-router-dom';
 import { RootState } from '../../store/types';
 import { authSignIn } from "../../store/actions/auth";
 
-import { Card } from "qruut";
-import { Input, Button, LoadingContent } from "../../components";
+import { Card, Button } from "qruut";
+import { Input, LoadingContent } from "../../components";
 
 interface StoreProps {
     isLoggedIn: boolean;
@@ -72,7 +72,7 @@ class LoginViewImpl extends React.Component<StoreProps, OwnState> {
                             className="mb-4" />
 
                         <div className="text-right">
-                            <Button primary={true} onClick={this._handleSignInClick} text="Sign in" />
+                            <Button onClick={this._handleSignInClick} text="Sign in" />
                         </div>
                     </Card>
                 </LoadingContent>
