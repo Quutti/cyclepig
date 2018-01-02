@@ -59,7 +59,7 @@ export const getRidesSummary = (rides: Ride[], options: RidesSummaryOptions): Ri
             continue;
         }
 
-        const label = labeler(dateUtils.jsonDateToDate(ride.date));
+        const label = labeler(new Date(ride.date));
         const labelIndex = labelMap.indexOf(label);
 
         if (labelIndex > -1) {
