@@ -6,8 +6,8 @@ import { RootState, Bike, Ride } from "../../../../store/types";
 import { addRide } from "../../../../store/actions/rides";
 import { addNotification } from "../../../../store/actions/notifications";
 
-import { GridCol, GridRow, Button } from "qruut";
-import { Select, SelectItem, Input } from "../../../../components";
+import { GridCol, GridRow, Button, Input } from "qruut";
+import { Select, SelectItem } from "../../../../components";
 
 interface OwnProps {
     bikes: Bike[];

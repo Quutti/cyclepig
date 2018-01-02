@@ -3,7 +3,6 @@ export * from "./navigation-bar";
 export * from "./notifications";
 
 /* Forms */
-export * from "./input";
 export * from "./select";
 
 /* Misc */

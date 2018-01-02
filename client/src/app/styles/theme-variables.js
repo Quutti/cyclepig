@@ -1,10 +1,14 @@
-const manager = require("qruut/dist/style-variables");
+const manager = require("qruut/dist/default-variables");
 const theme = [];
 
 // Set override variables
 const primaryColor1 = "#4e7494";
 
 manager.setVariable("primary-color-1", primaryColor1);
+manager.setVariable("success-color", "#8de057");
+manager.setVariable("error-color", "#e05757")
+
+manager.setVariable("input-border-color", "#c3c3c3");
 
 const variables = manager.getVariables();
 
@@ -24,9 +28,5 @@ theme.push({
     "navigation-bar-bg": variables["primary-color-1"]
 });
 
-theme.push({
-    "success-color": "#8de057",
-    "error-color": "#e05757"
-});
 
 module.exports = Object.assign({}, ...theme);
