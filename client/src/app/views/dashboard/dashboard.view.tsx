@@ -11,7 +11,7 @@ import { authSignOut } from "../../store/actions/auth";
 import { getRidesSummary } from "../../utils/rides-summary";
 import * as dateUtils from "@shared/date-utils";
 
-import { Card, GridContainer, GridCol, GridRow, LineChart, LineChartLine } from "qruut";
+import { Card, GridContainer, GridCol, GridRow, LineChart, LineChartLine, Table, TableColumn } from "qruut";
 import { SummaryCard, LoadingContent } from "../../components";
 import { AddRideForm } from "./components";
 
@@ -77,12 +77,16 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
             };
         });
 
+        const sortedRides = [...rides];
+        sortedRides.sort((ride1: Ride, ride2: Ride) => {
+            return new Date(ride2.date).valueOf() - new Date(ride1.date).valueOf();
+        });
+
         return (
             <div>
                 <div className="mb-5">
                     <button onClick={() => this.props.dispatch(authSignOut())}>Sign out</button>
                 </div>
-
 
                 <LoadingContent loading={this.props.isFetching}>
                     <GridContainer>
@@ -99,13 +103,25 @@ class DashboardViewImpl extends React.Component<DashboardStoreProps, {}> {
                                 </GridRow>
 
                                 <GridRow>
-                                    <GridCol>
+                                    <GridCol className="mb-4">
                                         <Card heading="Pulse">
                                             <LineChart lines={lineChartLines} />
                                         </Card>
                                     </GridCol>
-
                                 </GridRow>
+
+                                <GridRow>
+                                    <GridCol className="mb-4">
+                                        <Card heading="Rides">
+                                            <Table data={sortedRides} itemsPerPage={15} sortable>
+                                                <TableColumn propertyKey="date" text="Date" customValue={(date) => dateUtils.dateToJsonDate(new Date(date))} />
+                                                <TableColumn propertyKey="distance" type="numeric" text="Distance" customValue={(distance) => `${distance.toFixed(2)} km`} />
+                                                <TableColumn propertyKey="description" text="Description" />
+                                            </Table>
+                                        </Card>
+                                    </GridCol>
+                                </GridRow>
+
                             </GridCol>
                             <GridCol xl={4} lg={4}>
                                 <Card heading="Add new ride">
